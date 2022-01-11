@@ -1,0 +1,130 @@
+﻿@using HalcyonFlowProject.Data.Settings
+@inject Radzen.DialogService Dialog
+@inherits BaseComponent<DatabaseSettingsComponent>
+
+<RadzenCard>
+<RadzenTemplateForm class="tw-flex-col tw-space-y-2" TItem="DatabaseSettings" Data=@Settings Submit=@TestConnection>
+	<!--	HOST INPUT		-->
+	<div class="tw-flex">
+		<RadzenLabel 
+			class="tw-basis-1/3" 
+			Text=@Translate("Host and Port")/>
+		<RadzenTextBox 
+			class="tw-basis-1/2" 
+			Name="Host"
+			Change=@(x => ToggleSave(false))
+			@bind-Value="Settings.Host"/>
+		<RadzenLabel
+			Style="margin: auto;"
+			Component="Port"
+			Text=" : "/>
+		<RadzenNumeric
+			class="tw-basis-1/6" 
+			TValue="int"
+			Min=0
+			Max=65535
+			Name="Port"
+			Placeholder="3306"
+			Change=@(x => ToggleSave(false))
+			@bind-Value="Settings.Port"/>
+	</div>
+
+	<!--	DATABASE NAME INPUT		-->
+	<div class="tw-flex">
+		<RadzenLabel 
+			class="tw-basis-1/3" 
+			Text=@Translate("Database name")/>
+		<RadzenTextBox 
+			class="tw-basis-2/3" 
+			Name="Database name" 
+			@bind-Value="Settings.DatabaseName"
+			Change=@(x => ToggleSave(false))
+			Placeholder="Database"/>
+	</div>
+
+	<!--	USERNAME INPUT		-->
+	<div class="tw-flex">
+		<RadzenLabel 
+			class="tw-basis-1/3" 
+			Text=@Translate("Username")/>
+		<RadzenTextBox 
+			class="tw-basis-2/3" 
+			Name="Username"
+			@bind-Value="Settings.Username"
+			Change=@(x => ToggleSave(false))
+			Placeholder="Username"
+			AutoComplete=false/>
+	</div>
+
+	<!--	PASSWORD INPUT		-->
+	<div class="tw-flex">
+		<RadzenLabel 
+			class="tw-basis-1/3" 
+			Text=@Translate("Password")/>
+		<RadzenPassword 
+			class="tw-basis-2/3" 
+			Name="Password" 
+			@bind-Value="Settings.Password"
+			Change=@(x => ToggleSave(false))
+			Placeholder="Password" 
+			AutoComplete=false/>
+	</div>
+
+	<!--	BUTTONS		-->
+	<div class="tw-flex-row-reverse">
+		<!--	SAVE BUTTON		-->
+		<RadzenButton 
+			class="tw-basis-1/6" 
+			ButtonStyle=@ButtonStyle.Secondary
+			Text=@Translate("Save")
+			@bind-Disabled="SaveDisabled"
+			Click=@(x => Close(true))/>
+		<!--	CANCEL BUTTON		-->
+		<RadzenButton 
+			class="tw-basis-1/6" 
+			ButtonStyle=@ButtonStyle.Light
+			Text=@Translate("Cancel")
+			Click=@(x => Close(false))/>
+		<!--	TEST CONNECTION BUTTON		-->
+		<RadzenButton 
+			class="tw-basis-1/6" 
+			ButtonStyle=@ButtonStyle.Secondary
+			ButtonType="ButtonType.Submit"
+			Text=@Translate("Attempt Connection")/>
+	</div>
+</RadzenTemplateForm>
+</RadzenCard>
+
+@code {
+	[Parameter]
+	public Action? OnSave { get; set; }
+	protected DatabaseSettings Settings { get; set; } = new();
+	protected bool SaveDisabled { get; set; }
+
+	protected override void OnInitialized() {
+		base.OnInitialized();
+		TestConnection();
+	}
+
+	protected void ToggleSave(bool isEnabled) {
+		SaveDisabled = !isEnabled;
+	}
+
+	protected void Close(bool save) {
+		if(save) {
+			Settings.Save();
+			OnSave?.Invoke();
+		}
+		Dialog.Close();
+	}
+
+	protected void TestConnection() {
+		bool canConnect = DB.CanConnect(Settings);
+		if(canConnect) {
+			using DB db = new();
+			string query = $"SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '{Settings.DatabaseName}'";
+			db.Database.ExecuteSqlRaw(query);
+		}
+		ToggleSave(canConnect);
+	}
+}

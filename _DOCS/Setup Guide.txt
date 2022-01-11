@@ -1,0 +1,10 @@
+- To implement tailwind:
+	1. On VS startup, run the following command from the CLI:
+		tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch
+
+- To setup the database to handle accounts
+	0. Make sure the 'database' info explained above points to the correct schema
+	1. Open the Package Manager CLI (Visual Studio: Tools -> Nuget Package Manager -> Package Manager CLI)
+	2. Run the commands:
+			add-migration ‘identity’
+			Update-Database
