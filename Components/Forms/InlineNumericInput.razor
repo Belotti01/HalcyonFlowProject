@@ -1,0 +1,35 @@
+﻿@inherits BaseComponent<InlineNumericInput>
+
+<div class="tw-grid tw-grid-cols-3">
+	<div>
+		<RadzenLabel Text=@Translate(Label) MouseEnter=@(x => ShowTooltip(x, Tooltip))/>
+	</div>
+	<div class="tw-col-span-2 tw-flex-col">
+		<div>
+			@ChildContent
+		</div>
+		<div>
+			@if (Required) {
+				<RadzenRequiredValidator Component=@Component Text=@Translate("Can't be empty")/>
+			}
+			<RadzenNumericRangeValidator Min=@Min Max=@Max Component=@Component Text=@($"{Translate("Value out of range")} {Min}-{Max}")/>
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public RenderFragment ChildContent { get; set; } = null!;
+	[Parameter]
+	public string Tooltip { get; set; } = string.Empty;
+	[Parameter]
+	public string Label { get; set; } = string.Empty;
+	[Parameter]
+	public string Component { get; set; } = string.Empty;
+	[Parameter]
+	public bool Required { get; set; } = false;
+	[Parameter]
+	public decimal Min { get; set; } = decimal.MinValue;
+	[Parameter]
+	public decimal Max { get; set; } = decimal.MaxValue;
+}
