@@ -8,49 +8,41 @@
 <RadzenTooltip/>
 
 <div class="page">
-    @if (VerifyConnection()) {
-        <div class="sidebar">
-            <NavMenu />
-        </div>
+	@if (VerifyConnection()) {
+		<div class="sidebar">
+			<NavMenu />
+		</div>
 
-        <main>
-                <div class="top-row px-4 auth">
-                    <LoginDisplay />
-                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-                </div>
+		<main>
+			<div class="top-row px-4 auth">
+				<LoginDisplay />
+				<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+			</div>
 
-                <article class="content px-4">
-                    @Body
-                </article>
-        </main>
-    }else {
-        <div style="margin: auto;">
-            <DatabaseSettingsComponent OnSave="StateHasChanged"/>
-        </div>
-    }
+			<article class="content px-4">
+				@Body
+			</article>
+		</main>
+	}else {
+		<div style="margin: auto;">
+			<DatabaseSettingsComponent OnSave="StateHasChanged"/>
+		</div>
+	}
 </div>
 
 @code {
-    protected bool IsConnectionValid { get; set; } = false;
+	protected bool IsConnectionValid { get; set; } = false;
+	protected RadzenLabel? ConnectionAlert { get; set; }
 
-    protected bool VerifyConnection() {
-        if (!IsConnectionValid) {
-            using DB db = new DB();
-            try {
-                db.Database.SetConnectionString(new DatabaseSettings().GetConnectionString());
-                IsConnectionValid = db.Database.CanConnect();
-            }catch { }
-        }
-        return IsConnectionValid;
-    }
+	protected bool VerifyConnection() {
+		if (!IsConnectionValid) {
+			using DB db = new DB();
+			try {
+				db.Database.SetConnectionString(new DatabaseSettings().GetConnectionString());
+				IsConnectionValid = db.Database.CanConnect();
+			}catch { }
+		}
 
-    protected bool RequestConnection() {
-        Dialog.OpenAsync<DatabaseSettingsComponent>("Database Connection");
-        return VerifyConnection();
-    }
-
-    protected async Task Close() {
-        await Program.App?.StopAsync();
-        Program.Main(null!);
-    }
+		return IsConnectionValid;
+	}
 }

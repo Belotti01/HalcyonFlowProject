@@ -1,0 +1,15 @@
+﻿@inherits BaseComponent<DatabaseSettingsButton>
+
+<RadzenButton 
+	Text=@Translate("Database Settings") 
+	Click=@OpenDatabaseSettings
+	ButtonStyle="ButtonStyle.Secondary"
+/>
+
+@code {
+	public string Str { get; set; } = "";
+
+	protected async Task OpenDatabaseSettings() {
+		var res = await DialogService?.OpenAsync<DatabaseSettingsComponent>(Translate("Database Settings"));
+	}
+}
