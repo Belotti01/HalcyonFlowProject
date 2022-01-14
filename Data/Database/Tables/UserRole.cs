@@ -6,6 +6,5 @@
         public long Id { get; set; }
         [Column("name"), Required, MaxLength(45)]
         public string Name { get; set; } = string.Empty;
-    
     }
 }

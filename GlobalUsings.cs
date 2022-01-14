@@ -20,3 +20,5 @@ global using HalcyonFlowProject.Components;
 global using HalcyonFlowProject.Components.Buttons;
 global using HalcyonFlowProject.Components.Settings;
 global using HalcyonFlowProject.Logic;
+global using HalcyonFlowProject.Data.Enums;
+global using HalcyonFlowProject.Logic.Extensions;

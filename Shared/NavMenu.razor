@@ -11,15 +11,17 @@
     </div>
 </div>
 
-<RadzenPanelMenu>
-    <RadzenPanelMenuItem Text=@Translate("General") Icon="home">
-        <RadzenPanelMenuItem Text=@Translate("Home") Path=" " Icon="home"></RadzenPanelMenuItem>
-        <RadzenPanelMenuItem Text=@Translate("Counter") Path="counter" Icon="pan_tool_alt"></RadzenPanelMenuItem>
-    </RadzenPanelMenuItem>
-</RadzenPanelMenu>
+@if (!collapseNavMenu) {
+    <RadzenPanelMenu>
+        <RadzenPanelMenuItem Text=@Translate("General") Icon="home">
+            <RadzenPanelMenuItem Text=@Translate("Home") Path=" " Icon="home"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text=@Translate("Counter") Path="counter" Icon="pan_tool_alt"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+    </RadzenPanelMenu>
+}
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool collapseNavMenu = false;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

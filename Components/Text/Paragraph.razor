@@ -1,0 +1,34 @@
+﻿@inherits BaseComponent<Paragraph>
+
+<p class=@BuildClass()>
+	@Translate(Text)
+</p>
+
+
+@code {
+	[Parameter]
+	public string Class { get; set; } = string.Empty;
+	[Parameter]
+	public TextSize Size { get; set; } = TextSize.Base;
+	[Parameter]
+	public bool Center { get; set; } = false;
+	[Parameter]
+	public bool Capitalize { get; set; } = false;
+	[Parameter]
+	public bool UpperCase { get; set; } = false;
+	[Parameter]
+	public string Text { get; set; } = string.Empty;
+
+	protected string BuildClass() {
+		List<string> classes = new();
+		classes.Add(Size.ToClass());
+		if (Center)
+			classes.Add("tw-m-auto");
+		if (UpperCase)
+			classes.Add("tw-uppercase");
+		else if (Capitalize)
+			classes.Add("tw-capitalize");
+
+		return $"{string.Join(' ', classes)} {Class}";
+	}
+}
