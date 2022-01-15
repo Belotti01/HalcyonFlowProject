@@ -1,0 +1,21 @@
+﻿@inherits BaseDbComponent<UserDataGrid>
+
+<DataGrid TItem=@User Items=@Users Sorting Filtering Paging PageSize=20>
+    <RadzenDataGridColumn TItem=@User Property="Username" Title=@Translate("Username")/>
+    <RadzenDataGridColumn TItem=@User Property="Email" Title=@Translate("Email")/>
+    <RadzenDataGridColumn TItem=@User Property="PhoneNumber" Title=@Translate("Phonenumber")/>
+</DataGrid>
+
+@code {
+    /// <summary>
+    ///     The users to show in the grid. Leave empty to load all users in the database.
+    /// </summary>
+    [Parameter]
+    public IEnumerable<User> Users { get; set; } = null!;
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        Users ??= DbContext?.UserData.ToList() ?? Enumerable.Empty<User>();
+    }
+
+}
