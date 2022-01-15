@@ -2,7 +2,13 @@
 @typeparam TItem
 
 
-<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
+<div class="tw-flex tw-my-2">
+    @if(Grouping) {
+        <RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
+        <Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
+    }
+</div>
+<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
     <Columns>
         @ChildContent
     </Columns>
@@ -20,7 +26,11 @@
     [Parameter]
     public bool Sorting { get; set; } = false;
     [Parameter]
+    public bool Grouping { get; set; } = false;
+    [Parameter]
     public bool Paging { get; set; } = false;
     [Parameter]
     public int PageSize { get; set; } = 10;
+    
+    private bool GroupingEnabled { get; set; } = false;
 }

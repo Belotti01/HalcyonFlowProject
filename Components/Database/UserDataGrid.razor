@@ -1,9 +1,10 @@
 ﻿@inherits BaseDbComponent<UserDataGrid>
 
-<DataGrid TItem=@User Items=@Users Sorting Filtering Paging PageSize=20>
+<DataGrid TItem=@User Items=@Users Sorting Filtering Paging Grouping PageSize=20>
     <RadzenDataGridColumn TItem=@User Property="Username" Title=@Translate("Username")/>
     <RadzenDataGridColumn TItem=@User Property="Email" Title=@Translate("Email")/>
     <RadzenDataGridColumn TItem=@User Property="PhoneNumber" Title=@Translate("Phonenumber")/>
+    <RadzenDataGridColumn TItem=@User Property="PasswordHash" Title=@Translate("Password Hash")/>
 </DataGrid>
 
 @code {

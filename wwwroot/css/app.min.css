@@ -439,6 +439,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin: auto;
 }
 
+.tw-my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .tw-mt-2 {
   margin-top: 0.5rem;
 }
@@ -481,6 +486,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .tw-grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.tw-flex-row {
+  flex-direction: row;
 }
 
 .tw-flex-col {
