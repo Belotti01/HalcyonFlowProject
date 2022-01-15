@@ -493,15 +493,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
-.tw-text-center {
-  text-align: center;
-}
-
-.tw-text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
 .tw-text-xs {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -525,6 +516,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .tw-text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.tw-text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 
 .tw-text-3xl {
@@ -568,9 +564,4 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .tw-capitalize {
   text-transform: capitalize;
-}
-
-.tw-antialiased {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }

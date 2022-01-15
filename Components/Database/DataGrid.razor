@@ -1,0 +1,26 @@
+﻿@inherits BaseDbComponent<UserDataGrid>
+@typeparam TItem
+
+
+<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
+    <Columns>
+        @ChildContent
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    protected RadzenDataGrid<TItem>? Grid { get; private set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = default!;
+    [Parameter, Required]
+    public IEnumerable<TItem>? Items { get; set; }
+    [Parameter]
+    public bool Filtering { get; set; } = false;
+    [Parameter]
+    public bool Sorting { get; set; } = false;
+    [Parameter]
+    public bool Paging { get; set; } = false;
+    [Parameter]
+    public int PageSize { get; set; } = 10;
+}
