@@ -16,6 +16,11 @@ e.g. in App.it.resx:
 	VALUE: Ciao
 
 [ TRANSLATION ]
-The IStringLocalizer<App> object is instantiated through dependency injection, so it can be accessed through injection.
-This is already setup inside BaseComponent.cs, so always remember to inherit it.
+The IStringLocalizer<App> object is instantiated through dependency injection, so it can be accessed through the [Inject] attribute.
+This is already setup inside BaseComponent.cs, so always remember to inherit it when required.
 To translate from a Razor component, simply invoke the @Translate(string text) method, and write the text in english.
+
+[ TESTING ]
+To test a certain language, instead of changing your browser's settings, you can rename the resource files temporarily.
+For example: if I want to test the italian translations, I can swap the names of App.resx and App.it.resx, and the 
+browser (which is set to English) will recognize the new App.resx as the base translation resource.
