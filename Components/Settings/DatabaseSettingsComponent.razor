@@ -1,9 +1,7 @@
-﻿@using HalcyonFlowProject.Data.Settings
-@inject Radzen.DialogService Dialog
-@inherits BaseComponent<DatabaseSettingsComponent>
+﻿@inherits BaseComponent<DatabaseSettingsComponent>
 
 <RadzenCard>
-<RadzenTemplateForm class="tw-flex-col tw-space-y-2" TItem="DatabaseSettings" Data=@Settings Submit=@TestConnection>
+<RadzenTemplateForm TItem="DatabaseSettings" Data=@Settings Submit=@TestConnection>
 	<!--	HOST INPUT		-->
 	<InlineInput Component="Host" Required Label="Host and Port">
 		<div class="tw-grid tw-grid-cols-12">
@@ -61,7 +59,7 @@
 			Settings.Save();
 			OnSave?.Invoke();
 		}
-		Dialog.Close();
+		DialogService?.Close();
 	}
 
 	protected void TestConnection() {
