@@ -8,6 +8,7 @@ global using System.ComponentModel.DataAnnotations.Schema;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Localization;
 global using Microsoft.AspNetCore.Components;
+global using Microsoft.AspNetCore.Identity;
 
 global using HalcyonFlowProject;
 global using HalcyonFlowProject.Shared;

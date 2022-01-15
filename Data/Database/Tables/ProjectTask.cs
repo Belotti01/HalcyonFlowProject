@@ -1,10 +1,10 @@
 ﻿namespace HalcyonFlowProject.Data.Database.Tables {
-	[Table("Task")]
+	[Table("Tasks")]
 	public class ProjectTask {
 		[Column("id"), Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public long Id { get; set; }
 
-		[Column("fk_creator"), ForeignKey("User"), Required]
+		[Column("fk_creator"), ForeignKey("Users"), Required]
 		public long CreatorId { get; set; }
 		[Column("fk_ticket"), ForeignKey("Ticket")]
 		public long TicketId { get; set; } = -1;
@@ -15,7 +15,7 @@
 		public string Description { get; set; } = string.Empty;
 
 		public ValueTask<User?> GetCreatorAsync(DB dbContext) {
-			return dbContext.UserData.FindAsync(CreatorId);
+			return dbContext.Users.FindAsync(CreatorId);
         }
 
 		public ValueTask<Ticket?> GetSourceTicketAsync(DB dbContext) {

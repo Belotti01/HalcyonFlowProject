@@ -36,7 +36,7 @@ namespace HalcyonFlowProject {
 				builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 			}catch { }
 			// Setup entity framework
-			builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<DB>();
 			// Setup razor & blazor
 			builder.Services.AddRazorPages();
@@ -45,7 +45,7 @@ namespace HalcyonFlowProject {
 			builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 			builder.Services.AddScoped<IStringLocalizer<App>, StringLocalizer<App>>();
 			// Inject authentication
-			builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+			builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<User>>();
 			// Radzen components
 			builder.Services.AddScoped<DialogService>();
 			builder.Services.AddScoped<TooltipService>();

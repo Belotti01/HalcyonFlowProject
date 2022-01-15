@@ -1,11 +1,11 @@
 ﻿namespace HalcyonFlowProject.Data.Database.Tables {
-    [Table("UserAssignment")]
+    [Table("UserAssignments")]
     public class UserAssignment {
         [Column("id"), Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
-        [Column("fk_user"), Required, ForeignKey("Team")]
+        [Column("fk_user"), Required, ForeignKey("Teams")]
         public long UserId{ get; set; }
-        [Column("fk_task"), Required, ForeignKey("Task")]
+        [Column("fk_task"), Required, ForeignKey("Tasks")]
         public long TaskId { get; set; }
 
         [Column("comment"), Required, DataType(DataType.Text)]
@@ -16,7 +16,7 @@
         public DateTime DueDate { get; set; } = default;
 
         public ValueTask<User?> GetUserAsync(DB dbContext) {
-            return dbContext.UserData.FindAsync(UserId);
+            return dbContext.Users.FindAsync(UserId);
         }
 
         public ValueTask<ProjectTask?> GetTaskAsync(DB dbContext) {

@@ -16,7 +16,7 @@
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        Users ??= DbContext?.UserData.ToList() ?? Enumerable.Empty<User>();
+        Users ??= DbContext?.Users.ToList() ?? Enumerable.Empty<User>();
     }
 
 }

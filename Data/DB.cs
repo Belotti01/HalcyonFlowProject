@@ -5,7 +5,7 @@ using System.Data.Entity.Infrastructure;
 #nullable disable
 
 namespace HalcyonFlowProject.Data {
-	public class DB : IdentityDbContext {
+	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
 		public ObjectContext ObjectContext => ((IObjectContextAdapter)this).ObjectContext;
 
 		public DB(DbContextOptions<DB> options)
@@ -59,14 +59,12 @@ namespace HalcyonFlowProject.Data {
 		}
 		
 		// All classes tied to tables should be here:
-		public DbSet<User> UserData { get; set; }
-		public DbSet<UserRole> UserDataRole { get; set; }
 		public DbSet<Team> Teams { get; set; }
-		public DbSet<Teammate> Teammates { get; set; }
+		public DbSet<Teammates> Teammates { get; set; }
 		public DbSet<Ticket> Tickets { get; set; }
 		public DbSet<ProjectTask> Tasks { get; set; }
 		public DbSet<UserAssignment> UserAssignments { get; set; }
-		public DbSet<TeamAssignment> TeamAssignments { get; set; }
+		public DbSet<TeamAssignments> TeamAssignments { get; set; }
 
 
 		public bool VerifyTablesExist() {
