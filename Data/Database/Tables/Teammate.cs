@@ -4,7 +4,7 @@
         [Column("id"), Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         [Column("fk_user"), ForeignKey("User"), Required]
-        public long UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         [Column("fk_team"), ForeignKey("Team"), Required]
         public long TeamId { get; set; }
         //TODO: boolean team privilegies
