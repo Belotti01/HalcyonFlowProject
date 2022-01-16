@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HalcyonFlowProject.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20220116003523_databaseMigration")]
+    [Migration("20220116034645_databaseMigration")]
     partial class databaseMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

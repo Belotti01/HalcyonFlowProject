@@ -32,8 +32,12 @@
 		<RadzenButton class="tw-basis-1/6 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") @bind-Disabled="SaveDisabled" Click=@(x => Close(true))/>
 		<!--	CANCEL BUTTON		-->
 		<RadzenButton class="tw-basis-1/6 tw-ml-1" ButtonStyle=@ButtonStyle.Light Text=@Translate("Cancel") Click=@(x => Close(false))/>
+	</div>
+	<div class="tw-flex tw-mt-2">
 		<!--	TEST CONNECTION BUTTON		-->
 		<RadzenButton class="tw-grow tw-ml-2" ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
+		<!--	DB CREATION BUTTON		-->
+		<RadzenButton class="tw-grow tw-ml-2" Disabled=@SaveDisabled ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Update Database") Click=@CreateDatabase/>
 	</div>
 </RadzenTemplateForm>
 </RadzenCard>
@@ -71,5 +75,16 @@
 			}
 		}
 		ToggleSave(canConnect);
+	}
+
+	protected void CreateDatabase() {
+		DatabaseSettings oldSettings = new();
+		try {
+			Settings.Save();
+			using DB test = new();
+			test.Database.Migrate();
+		}catch {
+		}
+		oldSettings.Save();
 	}
 }
