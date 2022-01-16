@@ -31,7 +31,7 @@
 </div>
 
 @code {
-	protected bool IsConnectionValid { get; set; } = false;
+	protected static bool IsConnectionValid { get; set; } = false;
 	protected RadzenLabel? ConnectionAlert { get; set; }
 
 	protected bool VerifyConnection() {
@@ -40,7 +40,9 @@
 			try {
 				db.Database.SetConnectionString(new DatabaseSettings().GetConnectionString());
 				IsConnectionValid = db.Database.CanConnect();
-			}catch { }
+			}catch {
+				IsConnectionValid = false;
+			}
 		}
 
 		return IsConnectionValid;

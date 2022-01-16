@@ -1,14 +1,30 @@
-﻿@inherits BaseDbComponent<UserEditor>
+﻿@using Microsoft.EntityFrameworkCore.ChangeTracking
+@inherits BaseComponent<UserEditor>
 
 <RadzenCard>
+    <Form TItem=@User Item=@User OnSubmit=@Save OnCancel=@Revert IsDialog>
+        <InlineTextInput @bind-Value=@User.UserName Component=@nameof(User.UserName) Required MinLength=3 MaxLength=48/>
+        <InlineTextInput @bind-Value=@User.FullName Component=@nameof(User.FullName) Label="Full Name"/>
 
+    </Form>
 </RadzenCard>
 
 @code {
+    [Parameter, Required]
+    public DB? DbContext { get; set; }
     [Parameter]
     public User User { get; set; } = new();
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+    protected async Task Save() {
+        if(DbContext?.Users.Find(User.Id) is null) {
+            DbContext?.Users.Add(User);
+        }else {
+            DbContext.Entry(User).State = EntityState.Modified;
+        }
+        await DbContext?.SaveChangesAsync(true);
+    }
+
+    protected async Task Revert() {
+        await DbContext?.Entry(User).ReloadAsync();
     }
 }

@@ -12,32 +12,28 @@
 	</InlineInput>
 
 	<!--	DATABASE NAME INPUT		-->
-	<InlineInput Component="Database name" Required Label="Database name">
-		<RadzenTextBox class="tw-w-full" Name="Database name" @bind-Value="Settings.DatabaseName" Change=@(x => ToggleSave(false)) Placeholder="Database"/>
-	</InlineInput>
+	<InlineTextInput Component="Database name" Required @bind-Value="Settings.DatabaseName" Change=@(x => ToggleSave(false)) Placeholder="Database"/>
 
 	<!--	USERNAME INPUT		-->
-	<InlineInput Component="Username" Required Label="Username">
-		<RadzenTextBox class="tw-w-full" Name="Username" @bind-Value="Settings.Username" Change=@(x => ToggleSave(false)) Placeholder="Username" AutoComplete=false/>
-	</InlineInput>
+	<InlineTextInput Component="Username" Required @bind-Value="Settings.Username" Change=@(x => ToggleSave(false)) Placeholder="Username"/>
 
 	<!--	PASSWORD INPUT		-->
-	<InlineInput Component="Password" Required Label="Password">
+	<InlineInput Component="Password" Required>
 		<RadzenPassword class="tw-w-full" Name="Password" @bind-Value="Settings.Password" Change=@(x => ToggleSave(false)) Placeholder="Password" AutoComplete=false/>
 	</InlineInput>
 
 	<!--	BUTTONS		-->
-	<div class="tw-flex tw-mt-2">
-		<!--	SAVE BUTTON		-->
-		<RadzenButton class="tw-basis-1/6 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") @bind-Disabled="SaveDisabled" Click=@(x => Close(true))/>
-		<!--	CANCEL BUTTON		-->
-		<RadzenButton class="tw-basis-1/6 tw-ml-1" ButtonStyle=@ButtonStyle.Light Text=@Translate("Cancel") Click=@(x => Close(false))/>
-	</div>
-	<div class="tw-flex tw-mt-2">
+	<div class="tw-flex tw-mt-2 tw-justify-center">
 		<!--	TEST CONNECTION BUTTON		-->
-		<RadzenButton class="tw-grow tw-ml-2" ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
+		<RadzenButton class="tw-basis-4/5 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
 		<!--	DB CREATION BUTTON		-->
-		<RadzenButton class="tw-grow tw-ml-2" Disabled=@SaveDisabled ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Update Database") Click=@CreateDatabase/>
+		<RadzenButton class="tw-basis-4/5 tw-ml-1" Disabled=@SaveDisabled ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Update Database") Click=@CreateDatabase/>
+	</div>
+	<div class="tw-flex tw-mt-2 tw-justify-center">
+		<!--	SAVE BUTTON		-->
+		<RadzenButton class="tw-basis-1/4 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") @bind-Disabled="SaveDisabled" Click=@(x => Close(true))/>
+		<!--	CANCEL BUTTON		-->
+		<RadzenButton class="tw-basis-1/4 tw-ml-1" ButtonStyle=@ButtonStyle.Light Text=@Translate("Cancel") Click=@(x => Close(false))/>
 	</div>
 </RadzenTemplateForm>
 </RadzenCard>
@@ -83,7 +79,8 @@
 			Settings.Save();
 			using DB test = new();
 			test.Database.Migrate();
-		}catch {
+		}catch(Exception ex) {
+			Logger?.LogError($"Could not create database '{Settings.ToString()}: {ex.Message}'");
 		}
 		oldSettings.Save();
 	}

@@ -8,7 +8,7 @@
         <Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
     }
 </div>
-<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
+<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
     <Columns>
         @ChildContent
     </Columns>
@@ -27,6 +27,10 @@
     public bool Sorting { get; set; } = false;
     [Parameter]
     public bool Grouping { get; set; } = false;
+    [Parameter]
+    public bool ResizableColumns { get; set; } = false;
+    [Parameter]
+    public bool ReorderableColumns { get; set; } = false;
     [Parameter]
     public bool Paging { get; set; } = false;
     [Parameter]

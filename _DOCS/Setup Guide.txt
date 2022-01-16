@@ -1,4 +1,4 @@
-- To implement tailwind:
+- To properly implement tailwind while debugging:
 	1. On VS startup, run the following command from the CLI:
 		tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch
 

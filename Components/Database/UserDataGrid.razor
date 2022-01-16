@@ -1,27 +1,40 @@
 ﻿@inherits BaseDbComponent<UserDataGrid>
-@using Radzen.Blazor.Rendering;
-<DataGrid TItem=@User Items=@Users Sorting Filtering Paging Grouping PageSize=20>
-	<RadzenDataGridColumn TItem=@User Property="Username" Title=@Translate("Username")/>
-	<RadzenDataGridColumn TItem=@User Property="Email" Title=@Translate("Email")/>
-	<RadzenDataGridColumn TItem=@User Property="PhoneNumber" Title=@Translate("Phone Number")/>
-	<RadzenDataGridColumn TItem=@User Property="PasswordHash" Title=@Translate("Password Hash")/>
-	<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false>
+
+<DataGrid TItem=@User Items=@Users Sorting Filtering Paging Grouping PageSize=20 ResizableColumns ReorderableColumns>
+	<RadzenDataGridColumn TItem=@User Property=@nameof(User.UserName) Title=@Translate("Username")/>
+	<RadzenDataGridColumn TItem=@User Property=@nameof(User.FullName) Title=@Translate("Full Name")/>
+	<RadzenDataGridColumn TItem=@User Property=@nameof(User.PhoneNumber) Title=@Translate("Phone")/>
+	<RadzenDataGridColumn TItem=@User Property=@nameof(User.RoleId) Title=@Translate("Role")>
 		<Template Context="User">
-			<OpenDialogButton TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User } })/>
+			@(User.GetRole(DbContext)?.Name ?? "");
+		</Template>
+	</RadzenDataGridColumn>
+	<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false Resizable=false Reorderable=false>
+		<Template Context="User">
+			<OpenDialogButton OnDialogClose=@((x) => ReloadUser(User)) TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User }, { "DbContext", DbContext } })/>
 		</Template>
 	</RadzenDataGridColumn>
 </DataGrid>
 
 @code {
-    /// <summary>
-    ///     The users to show in the grid. Leave empty to load all users in the database.
-    /// </summary>
-    [Parameter]
-    public IEnumerable<User> Users { get; set; } = null!;
+	/// <summary>
+	///		Whether to show the column which allows the user to edit the items in the grid.
+	/// </summary>
+	[Parameter]
+	public bool ShowEditColumn { get; set; }
+	/// <summary>
+	///     The users to show in the grid. Leave empty to load all users in the database.
+	/// </summary>
+	[Parameter]
+	public IEnumerable<User> Users { get; set; } = null!;
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
-		Users ??= DbContext?.Users.ToList() ?? Enumerable.Empty<User>();
+	protected override void OnInitialized() {
+		base.OnInitialized();
+		Users ??= DbContext?.Users ?? Enumerable.Empty<User>();
+	}
+
+	protected async Task ReloadUser(User user) {
+		await DbContext.Entry(user).ReloadAsync();
 	}
 
 }

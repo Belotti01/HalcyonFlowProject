@@ -1,37 +1,35 @@
 ﻿@inherits InlineInput
-@typeparam TValue
-
 
 <InlineInput Component=@Component Label=@Label Required=@Required Tooltip=@Tooltip>
 		<ChildContent>
-			<RadzenNumeric class="tw-w-full" @bind-Value=@Value TValue=@TValue Placeholder=@Placeholder Name=@Component Change=@OnValueChanged/>
+			<RadzenTextBox class="tw-w-full" @bind-Value=@Value Placeholder=@Placeholder Name=@Component Change=@OnValueChanged/>
 		</ChildContent>
 		<Validators>
-			<RadzenNumericRangeValidator Min=@Min Max=@Max Component=@Component Text=@($"{Translate("Value out of range")} {Min}-{Max}")/>
+			<RadzenLengthValidator Min=@MinLength Max=@MaxLength Component=@Component Text=@($"{Translate("Length must be between")} {MinLength}-{MaxLength}")/>
 		</Validators>
 </InlineInput>
 
 @code {
 	[Parameter]
-	public decimal Min { get; set; } = decimal.MinValue;
+	public int MinLength { get; set; } = 0;
 	[Parameter]
-	public decimal Max { get; set; } = decimal.MaxValue;
+	public int MaxLength { get; set; } = 255;
 	[Parameter]
 	public string Placeholder { get; set; } = string.Empty;
 	/// <summary>
 	/// Bind this parameter to link it to the value of the input field.
 	/// </summary>
 	[Parameter, Required]
-	public TValue Value { get; set; } = default!;
+	public string? Value { get; set; }
 	[Parameter]
-	public EventCallback<TValue> Change { get; set; }
+	public EventCallback<string?> Change { get; set; }
 	/// <summary>
 	/// Generated - do not set. Use <see cref="Change"/> instead.
 	/// </summary>
 	[Parameter]
-	public EventCallback<TValue> ValueChanged { get; set; }
+	public EventCallback<string?> ValueChanged { get; set; }
 
-	protected async Task OnValueChanged(TValue value) {
+	protected async Task OnValueChanged(string value) {
 		if(ValueChanged.HasDelegate) {
 			await ValueChanged.InvokeAsync(value);
 		}

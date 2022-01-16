@@ -2,9 +2,9 @@
 
 <div class="tw-grid tw-grid-cols-3">
 	<div>
-		<RadzenLabel Text=@Translate(Label) MouseEnter=@(x => ShowTooltip(x, Tooltip))/>
+		<RadzenLabel Text=@Translate(Label ?? Component) MouseEnter=@(x => ShowTooltip(x, Tooltip))/>
 	</div>
-	<div class="tw-col-span-2 tw-flex-col">
+	<div class="tw-col-span-2 tw-row-span-2">
 		<div>
 			@ChildContent
 		</div>
@@ -12,6 +12,7 @@
 			@if (Required) {
 				<RadzenRequiredValidator Component=@Component Text=@Translate("Can't be empty")/>
 			}
+			@Validators
 		</div>
 	</div>
 </div>
@@ -20,11 +21,23 @@
 	[Parameter]
 	public RenderFragment ChildContent { get; set; } = null!;
 	[Parameter]
-	public string Tooltip { get; set; } = string.Empty;
+	public RenderFragment Validators { get; set; } = null!;
 	[Parameter]
-	public string Label { get; set; } = string.Empty;
+	public string Tooltip { get; set; } = string.Empty;
+	/// <summary>
+	/// The text to show to the user to identify this input's name. If unspecified, <see cref="Component"/> will be used
+	/// instead.
+	/// </summary>
+	[Parameter]
+	public string? Label { get; set; } = null;
+	/// <summary>
+	/// The name of the field linked to this input.
+	/// </summary>
 	[Parameter]
 	public string Component { get; set; } = string.Empty;
+	/// <summary>
+	/// If <see langword="true"/>, this input field can't be left empty.
+	/// </summary>
 	[Parameter]
 	public bool Required { get; set; } = false;
 }
