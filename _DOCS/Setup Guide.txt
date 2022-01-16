@@ -4,7 +4,12 @@
 
 - To setup the database to handle accounts
 	0. Make sure the 'database' info explained above points to the correct schema
-	1. Open the Package Manager CLI (Visual Studio: Tools -> Nuget Package Manager -> Package Manager CLI)
-	2. Run the commands:
-			add-migration ‘identity’
+	1. If it exists, delete the file ending with '_databaseMigration.cs' under the 'Migrations' folder
+	2. Open the Package Manager CLI (Visual Studio: Tools -> Nuget Package Manager -> Package Manager CLI)
+	3. Run the following commands:
+			remove-migration
+			add-migration 'databaseMigration'
 			Update-Database
+	remove-migration:	Resets the migration status as the database is yet to be created
+	add-migration:		Creates or updates the migration file to include the latest edits
+	update-database:	Creates the schema (if missing) and all the required tables

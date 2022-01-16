@@ -1,10 +1,15 @@
 ﻿@inherits BaseDbComponent<UserDataGrid>
-
+@using Radzen.Blazor.Rendering;
 <DataGrid TItem=@User Items=@Users Sorting Filtering Paging Grouping PageSize=20>
-    <RadzenDataGridColumn TItem=@User Property="Username" Title=@Translate("Username")/>
-    <RadzenDataGridColumn TItem=@User Property="Email" Title=@Translate("Email")/>
-    <RadzenDataGridColumn TItem=@User Property="PhoneNumber" Title=@Translate("Phonenumber")/>
-    <RadzenDataGridColumn TItem=@User Property="PasswordHash" Title=@Translate("Password Hash")/>
+	<RadzenDataGridColumn TItem=@User Property="Username" Title=@Translate("Username")/>
+	<RadzenDataGridColumn TItem=@User Property="Email" Title=@Translate("Email")/>
+	<RadzenDataGridColumn TItem=@User Property="PhoneNumber" Title=@Translate("Phone Number")/>
+	<RadzenDataGridColumn TItem=@User Property="PasswordHash" Title=@Translate("Password Hash")/>
+	<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false>
+		<Template Context="User">
+			<OpenDialogButton TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User } })/>
+		</Template>
+	</RadzenDataGridColumn>
 </DataGrid>
 
 @code {
@@ -16,7 +21,7 @@
 
     protected override void OnInitialized() {
         base.OnInitialized();
-        Users ??= DbContext?.Users.ToList() ?? Enumerable.Empty<User>();
-    }
+		Users ??= DbContext?.Users.ToList() ?? Enumerable.Empty<User>();
+	}
 
 }

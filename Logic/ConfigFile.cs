@@ -55,9 +55,10 @@ namespace HalcyonFlowProject.Logic {
         }
 
         private static void CreateFolder(string filepath) {
-            if (filepath is null) return;
-            string folder = Path.GetDirectoryName(filepath);
+            if(filepath is null) return;
+            string? folder = Path.GetDirectoryName(filepath);
 
+            if(folder is null) return;
             Directory.CreateDirectory(folder);
         }
     }

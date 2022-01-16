@@ -10,6 +10,8 @@ namespace HalcyonFlowProject.Components {
         protected ILoggerFactory? LoggerFactory { get; set; }
         [Inject]
         protected IStringLocalizer<App>? Localizer { get; set; }
+        [Inject]
+        protected AuthenticationStateProvider? Authentication { get; set; }
 
         protected ILogger<TSelf>? Logger { get; set; }
 
@@ -19,6 +21,7 @@ namespace HalcyonFlowProject.Components {
             Logger = LoggerFactory?.CreateLogger<TSelf>();
         }
 
+        /// <inheritdoc cref="TooltipService.Open(ElementReference, string, TooltipOptions)"/>
         protected void ShowTooltip(ElementReference element, string? content, TooltipOptions options = null!) {
             if (!string.IsNullOrWhiteSpace(content)) {
                 TooltipService?.Open(element, Translate(content), options);
@@ -27,6 +30,15 @@ namespace HalcyonFlowProject.Components {
 
         protected string Translate(string text) {
             return Localizer?.GetString(text) ?? text;
+        }
+
+        /// <inheritdoc cref="AuthenticationStateProvider.GetAuthenticationStateAsync()"/>
+        protected async Task<AuthenticationState?> GetAuthState() {
+            // Getting the information everytime from this method rather than caching its result on initialization
+            // is slower, but assures the validity of the authentication state received.
+            return Authentication is null
+                ? null
+                : await Authentication.GetAuthenticationStateAsync();
         }
 
         #region Finalization

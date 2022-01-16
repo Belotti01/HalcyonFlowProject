@@ -1,0 +1,13 @@
+﻿@inherits BaseComponent<PageWrapper>
+
+<RadzenCard Style="margin-bottom: 1rem;">
+    <Paragraph Class="tw-my-3" Center Size=@TextSize.XL3 Text=@Translate(Title)/>
+</RadzenCard> 
+@ChildContent
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    [Parameter, Required]
+    public string Title { get; set; } = string.Empty;
+}

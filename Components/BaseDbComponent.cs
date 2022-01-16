@@ -1,4 +1,6 @@
-﻿namespace HalcyonFlowProject.Components {
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace HalcyonFlowProject.Components {
     public class BaseDbComponent<TSelf> : BaseComponent<TSelf>, IDisposable {
         [Inject]
         protected IDbContextFactory<DB>? DbContextFactory { get; set; }
@@ -9,11 +11,19 @@
             DbContext = DbContextFactory?.CreateDbContext();
         }
 
+        #region Finalization
+        ~BaseDbComponent() {
+            Dispose();
+        }
+
         public override void Dispose() {
             DbContext?.Dispose();
             DbContext = null;
+
             base.Dispose();
+            GC.SuppressFinalize(this);
         }
+        #endregion
 
 
     }

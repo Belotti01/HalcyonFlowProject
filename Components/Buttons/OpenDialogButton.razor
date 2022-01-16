@@ -1,0 +1,28 @@
+﻿@inherits BaseComponent<OpenDialogButton<TDialog>>
+@typeparam TDialog where TDialog : ComponentBase
+
+<RadzenButton 
+	Text=@Translate(ButtonText) 
+	Click=@OpenDialogAsync
+	ButtonStyle=@ButtonStyle
+/>
+
+@code {
+	[Parameter, Required]
+	public string ButtonText { get; set; } = string.Empty;
+	[Parameter, Required]
+	public string DialogTitle { get; set; } = string.Empty;
+	[Parameter]
+	public ButtonStyle ButtonStyle { get; set; } = ButtonStyle.Secondary;
+	[Parameter]
+	public Dictionary<string, object>? DialogParameters { get; set; }
+	[Parameter]
+	public EventCallback<dynamic?> OnDialogClose { get; set; }
+
+	protected virtual async Task OpenDialogAsync() {
+		var result = await DialogService?.OpenAsync<TDialog>(DialogTitle, DialogParameters);
+		if(OnDialogClose.HasDelegate) {
+			await OnDialogClose.InvokeAsync(result);
+		}
+	}
+}

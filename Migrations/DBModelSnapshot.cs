@@ -188,6 +188,11 @@ namespace HalcyonFlowProject.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("fullname");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
 
@@ -210,6 +215,10 @@ namespace HalcyonFlowProject.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<long>("RoleId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("fk_role");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("longtext");
@@ -318,6 +327,38 @@ namespace HalcyonFlowProject.Migrations
 
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("CanAssignTasks")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_assign_tasks");
+
+                    b.Property<bool>("CanComment")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_comment");
+
+                    b.Property<bool>("CanCreateProjects")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_projects");
+
+                    b.Property<bool>("CanCreateTasks")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_tasks");
+
+                    b.Property<bool>("CanCreateTickets")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_tickets");
+
+                    b.Property<bool>("IsAdministrator")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_administrator");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_default_role");
+
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_manager");
 
                     b.HasKey("UserId", "RoleId");
 

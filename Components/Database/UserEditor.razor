@@ -1,0 +1,14 @@
+﻿@inherits BaseDbComponent<UserEditor>
+
+<RadzenCard>
+
+</RadzenCard>
+
+@code {
+    [Parameter]
+    public User User { get; set; } = new();
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+    }
+}

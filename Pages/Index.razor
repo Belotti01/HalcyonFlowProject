@@ -2,13 +2,12 @@
 <TailwindForceLoad/>
 <PageTitle>Index</PageTitle>
 
-<RadzenCard>
-    <Paragraph Text="Welcome to HalcyonFlow" Capitalize Center Size=@TextSize.XL3/>
-    <DatabaseSettingsButton/>
-</RadzenCard>
+<PageWrapper Title="Welcome to HalcyonFlow">
+    <RadzenCard>
+        <OpenDialogButton TDialog=@DatabaseSettingsComponent ButtonText="Database Settings"/>
+    </RadzenCard>
 
-<RadzenCard>
-    <UserDataGrid></UserDataGrid>
-</RadzenCard>
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <RadzenCard>
+        <UserDataGrid/>
+    </RadzenCard>
+</PageWrapper>
