@@ -1,7 +1,9 @@
 ﻿using HalcyonFlowProject.Data.Settings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 #nullable disable
 
 namespace HalcyonFlowProject.Data.Database.Context {
@@ -68,8 +70,32 @@ namespace HalcyonFlowProject.Data.Database.Context {
 
 
 		public bool VerifyTablesExist() {
-			//TODO
-			return true;
+			try {
+				VerifyTableExists(Teams);
+				VerifyTableExists(Teammates);
+				VerifyTableExists(Tickets);
+				VerifyTableExists(Tasks);
+				VerifyTableExists(UserAssignments);
+				VerifyTableExists(TeamAssignments);
+				return true;
+			} catch {
+				//TODO: Handle exceptions
+				return false;
+            }
+		}
+
+		protected bool VerifyTableExists<TEntity>(DbSet<TEntity> table) where TEntity : class {
+			try {
+				_ = table.Any();
+				return true;
+            }catch(EntityCommandExecutionException ex) {
+				if(ex.InnerException is SqlException) {
+					return false;
+                }else {
+					throw ex;
+                }
+            }
+			
 		}
 	}
 }
