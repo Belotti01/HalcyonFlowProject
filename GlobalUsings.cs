@@ -24,3 +24,4 @@ global using HalcyonFlowProject.Logic.Extensions;
 global using HalcyonFlowProject.Components.Buttons;
 global using HalcyonFlowProject.Components.Settings;
 global using HalcyonFlowProject.Data.Database.Tables;
+global using HalcyonFlowProject.Data.Database.Context;

@@ -9,11 +9,13 @@
 			@(User.GetRole(DbContext)?.Name ?? "");
 		</Template>
 	</RadzenDataGridColumn>
-	<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false Resizable=false Reorderable=false>
-		<Template Context="User">
-			<OpenDialogButton OnDialogClose=@((x) => ReloadUser(User)) TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User }, { "DbContext", DbContext } })/>
-		</Template>
-	</RadzenDataGridColumn>
+	@if(ShowEditColumn) {
+		<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false Resizable=false Reorderable=false>
+			<Template Context="User">
+				<OpenDialogButton OnDialogClose=@((x) => ReloadUser(User)) TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User }, { "DbContext", DbContext } })/>
+			</Template>
+		</RadzenDataGridColumn>
+	}
 </DataGrid>
 
 @code {
@@ -21,7 +23,7 @@
 	///		Whether to show the column which allows the user to edit the items in the grid.
 	/// </summary>
 	[Parameter]
-	public bool ShowEditColumn { get; set; }
+	public bool ShowEditColumn { get; set; } = false;
 	/// <summary>
 	///     The users to show in the grid. Leave empty to load all users in the database.
 	/// </summary>

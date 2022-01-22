@@ -33,12 +33,16 @@ namespace HalcyonFlowProject.Components {
         }
 
         /// <inheritdoc cref="AuthenticationStateProvider.GetAuthenticationStateAsync()"/>
-        protected async Task<AuthenticationState?> GetAuthState() {
+        protected async Task<AuthenticationState?> GetAuthStateAsync() {
             // Getting the information everytime from this method rather than caching its result on initialization
             // is slower, but assures the validity of the authentication state received.
             return Authentication is null
                 ? null
                 : await Authentication.GetAuthenticationStateAsync();
+        }
+
+        protected async Task<bool> IsUserLoggedAsync() {
+            return (await GetAuthStateAsync())?.User.Identity?.IsAuthenticated ?? false;
         }
 
         #region Finalization

@@ -4,7 +4,7 @@ using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 #nullable disable
 
-namespace HalcyonFlowProject.Data {
+namespace HalcyonFlowProject.Data.Database.Context {
 	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
 		public ObjectContext ObjectContext => ((IObjectContextAdapter)this).ObjectContext;
 

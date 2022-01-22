@@ -3,6 +3,8 @@
     public class UserRole : IdentityUserRole<long> {
         [Column("is_default_role")]
         public bool IsDefault { get; set; }
+        [Column("name"), MinLength(3), MaxLength(32)]
+        public string Name { get; set; } = string.Empty;
 
 
         [Column("is_administrator")]
