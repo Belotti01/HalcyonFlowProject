@@ -11,13 +11,13 @@ namespace HalcyonFlowProject.Components {
             DbContext = DbContextFactory?.CreateDbContext();
         }
 
-        protected async Task<bool> CheckUserPermissions(Func<UserRole, bool> roleCheck) {
+        protected async Task<bool> CheckUserPermissions(Func<Role, bool> roleCheck) {
             if(!await IsUserLoggedAsync()) return false;
             if(DbContext is null) return false;
             AuthenticationState? identity = await GetAuthStateAsync();
             if(identity is null) return false;
 
-            foreach(UserRole role in DbContext.UserRoles.AsEnumerable().Where(x => roleCheck.Invoke(x))) {
+            foreach(Role role in DbContext.Roles.AsEnumerable().Where(x => roleCheck.Invoke(x))) {
                 if(identity.User.IsInRole(role.Name)) {
                     return true;
                 }

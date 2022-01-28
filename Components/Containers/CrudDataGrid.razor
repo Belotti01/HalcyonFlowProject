@@ -1,0 +1,88 @@
+﻿@inherits DataGrid<TItem>
+@typeparam TItem where TItem : class, new()
+
+<div class="tw-flex tw-my-2">
+    @if(Grouping) {
+        <RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
+        <Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
+    }
+</div>
+
+<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.") EditMode=@EditMode RowDoubleClick=OnRowDoubleClick>
+    <Columns>
+        @ChildContent
+    </Columns>
+</RadzenDataGrid>
+
+@if(CanModify) {
+    <div class="tw-flex tw-my-2">
+        @if(CanAdd) {
+            <RadzenButton Style="margin-right: 4px;" Text=@Translate("Add new") Disabled=@Busy ButtonStyle=@ButtonStyle.Secondary Click=@OnAddClick/>
+        }
+        <RadzenButton Text=@Translate("Save")  Disabled=@Busy ButtonStyle=@ButtonStyle.Secondary Click=@OnSaveClick/>
+    </div>
+}
+
+@code {
+    [Parameter, Required, MemberNotNull]
+    public DB DbContext { get; set; } = null!;
+    [Parameter]
+    public bool CanAdd { get; set; } = false;
+    [Parameter]
+    public bool CanModify { get; set; }
+    [Parameter]
+    public bool CanDelete { get; set; } = false;
+    [Parameter]
+    public DataGridEditMode EditMode { get; set; } = DataGridEditMode.Single;
+
+    protected bool Busy { get; set; } = false;
+    protected TItem? EditingRow;
+    protected readonly List<TItem> createdItems = new();
+    protected readonly List<TItem> editedItems = new();
+    protected readonly List<TItem> removedItems = new();
+
+
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+    }
+
+    protected async Task OnAddClick(MouseEventArgs e) {
+        if(Busy) return;
+        Busy = true;
+        TItem newItem = new();
+        createdItems.Add(newItem);
+        await Grid.InsertRow(newItem);
+        EditingRow = newItem;
+        Busy = false;
+    }
+
+    protected async Task OnSaveClick(MouseEventArgs e) {
+        if(Busy) return;
+        Busy = true;
+        createdItems.ForEach(async(x) => await DbContext.AddAsync(x, false));
+        createdItems.Clear();
+        editedItems.ForEach(async(x) => await DbContext.UpdateAsync(x, false));
+        editedItems.Clear();
+        removedItems.ForEach(async(x) => await DbContext.DeleteAsync(x, false));
+        removedItems.Clear();
+        await DbContext.SaveChangesAsync();
+
+        if(EditingRow is not null) {
+            Grid.CancelEditRow(EditingRow);
+        }
+        await Grid.Reload();
+        Busy = false;
+    }
+
+    protected async Task OnRowDoubleClick(DataGridRowMouseEventArgs<TItem> e) {
+        if(Busy) return;
+        Busy = true;
+        if(EditingRow is not null) {
+            await Grid.UpdateRow(EditingRow);
+        }
+        await Grid.EditRow(e.Data);
+        editedItems.Add(e.Data);
+        EditingRow = e.Data;
+        Busy = false;
+    }
+}

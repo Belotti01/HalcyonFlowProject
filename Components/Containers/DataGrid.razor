@@ -1,5 +1,5 @@
-﻿@inherits BaseDbComponent<UserDataGrid>
-@typeparam TItem
+﻿@inherits BaseComponent<DataGrid<TItem>>
+@typeparam TItem where TItem : class, new()
 
 
 <div class="tw-flex tw-my-2">
@@ -15,12 +15,13 @@
 </RadzenDataGrid>
 
 @code {
-    protected RadzenDataGrid<TItem>? Grid { get; private set; }
+    [MemberNotNull]
+    protected RadzenDataGrid<TItem> Grid { get; set; } = null!;
 
     [Parameter]
     public RenderFragment ChildContent { get; set; } = default!;
-    [Parameter, Required]
-    public IEnumerable<TItem>? Items { get; set; }
+    [Parameter, Required, MemberNotNull]
+    public IEnumerable<TItem> Items { get; set; } = null!;
     [Parameter]
     public bool Filtering { get; set; } = false;
     [Parameter]
@@ -35,6 +36,12 @@
     public bool Paging { get; set; } = false;
     [Parameter]
     public int PageSize { get; set; } = 10;
-    
-    private bool GroupingEnabled { get; set; } = false;
+
+    protected TItem? InEditItem { get; set; }
+
+    protected bool GroupingEnabled { get; set; } = false;
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+    }
 }

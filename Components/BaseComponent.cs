@@ -3,6 +3,10 @@
 namespace HalcyonFlowProject.Components {
     public class BaseComponent<TSelf> : ComponentBase, IDisposable {
         [Inject]
+        protected SignInManager<User>? SignInManager { get; set; }
+        [Inject]
+        protected UserManager<User>? UserManager { get; set; }
+        [Inject]
         protected DialogService? DialogService { get; set; }
         [Inject]
         protected TooltipService? TooltipService { get; set; }

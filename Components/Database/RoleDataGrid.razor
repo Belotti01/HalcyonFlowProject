@@ -1,0 +1,39 @@
+﻿@inherits BaseDbComponent<RoleDataGrid>
+
+<CrudDataGrid TItem=@Role Items=@Roles Sorting Filtering Paging PageSize=20 ResizableColumns ReorderableColumns CanAdd CanModify CanDelete DbContext=@DbContext>
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.Name) Title=@Translate("Name")>
+		<EditTemplate>
+			<InlineTextInput Required @bind-Value=@role.Name Label="" Placeholder="Name" Component=@nameof(Role.Name)/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsAdministrator) Title=@Translate("Admin")>
+		
+	</RadzenDataGridColumn>
+</CrudDataGrid>
+
+@code {
+	/// <summary>
+	///		Whether to show the column which allows the user to edit the items in the grid.
+	/// </summary>
+	[Parameter]
+	public bool AllowEditing { get; set; } = false;
+	/// <summary>
+	///     The users to show in the grid. Leave empty to load all users in the database.
+	/// </summary>
+	[Parameter]
+	public IEnumerable<Role> Roles { get; set; } = null!;
+
+	protected override void OnInitialized() {
+		base.OnInitialized();
+		Roles ??= DbContext?.Roles ?? Enumerable.Empty<Role>();
+	}
+
+	protected async Task ReloadRole(Role role) {
+		if(DbContext is not null) {
+			await DbContext.Entry(role).ReloadAsync();
+		}else {
+			Logger?.LogError($"The DbContext was not passed to the {nameof(RoleDataGrid)} and the data could not be updated.");
+		}
+	}
+
+}

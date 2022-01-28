@@ -1,9 +1,11 @@
 ﻿@inherits BaseComponent<InlineInput>
 
 <div class="tw-grid tw-grid-cols-3">
-	<div>
-		<RadzenLabel Text=@Translate(Label ?? Component) MouseEnter=@(x => ShowTooltip(x, Tooltip))/>
-	</div>
+	@if(!NoLabel) {
+		<div>
+			<RadzenLabel Text=@Translate(Label ?? Component) MouseEnter=@(x => ShowTooltip(x, Tooltip))/>
+		</div>
+	}
 	<div class="tw-col-span-2 tw-row-span-2">
 		<div>
 			@ChildContent
@@ -18,6 +20,8 @@
 </div>
 
 @code {
+	[Parameter]
+	public bool NoLabel { get; set; } = false;
 	[Parameter]
 	public RenderFragment ChildContent { get; set; } = null!;
 	[Parameter]

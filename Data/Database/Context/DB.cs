@@ -95,7 +95,62 @@ namespace HalcyonFlowProject.Data.Database.Context {
 					throw ex;
                 }
             }
-			
 		}
+
+		#region CRUD<T>
+		public IEnumerable<T> Get<T>() where T : class {
+			DbSet<T> set = Set<T>();
+			return set.AsEnumerable();
+		}
+
+		public IAsyncEnumerable<T> GetAsync<T>() where T : class {
+			DbSet<T> set = Set<T>();
+			return set.AsAsyncEnumerable();
+		}
+
+		public void Add<T>(T entity, bool save = true) where T : class {
+			DbSet<T> set = Set<T>();
+			set.Add(entity);
+			if(save) {
+				SaveChanges();
+			}
+		}
+
+		public async Task AddAsync<T>(T entity, bool save = true) where T : class {
+			DbSet<T> set = Set<T>();
+			await set.AddAsync(entity);
+			if(save) {
+				await SaveChangesAsync();
+			}
+		}
+
+		public void Update<T>(T entity, bool save = true) where T : class {
+			Entry(entity).State = EntityState.Modified;
+			if(save) {
+				SaveChanges();
+			}
+		}
+
+		public async Task UpdateAsync<T>(T entity, bool save = true) where T : class {
+			Entry(entity).State = EntityState.Modified;
+			if(save) {
+				await SaveChangesAsync();
+			}
+		}
+
+		public void Delete<T>(T entity, bool save = true) where T : class {
+			Remove(entity);
+			if(save) {
+				SaveChanges();
+			}
+		}
+
+		public async Task DeleteAsync<T>(T entity, bool save = true) where T : class {
+			Remove(entity);
+			if(save) {
+				await SaveChangesAsync();
+			}
+		}
+		#endregion
 	}
 }

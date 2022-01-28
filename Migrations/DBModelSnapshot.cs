@@ -56,9 +56,41 @@ namespace HalcyonFlowProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("CanAssignTasks")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_assign_tasks");
+
+                    b.Property<bool>("CanComment")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_comment");
+
+                    b.Property<bool>("CanCreateProjects")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_projects");
+
+                    b.Property<bool>("CanCreateTasks")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_tasks");
+
+                    b.Property<bool>("CanCreateTickets")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("can_create_tickets");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsAdministrator")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_administrator");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_default_role");
+
+                    b.Property<bool>("IsManager")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_manager");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -327,44 +359,6 @@ namespace HalcyonFlowProject.Migrations
 
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("CanAssignTasks")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_assign_tasks");
-
-                    b.Property<bool>("CanComment")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_comment");
-
-                    b.Property<bool>("CanCreateProjects")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_create_projects");
-
-                    b.Property<bool>("CanCreateTasks")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_create_tasks");
-
-                    b.Property<bool>("CanCreateTickets")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("can_create_tickets");
-
-                    b.Property<bool>("IsAdministrator")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_administrator");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_default_role");
-
-                    b.Property<bool>("IsManager")
-                        .HasColumnType("tinyint(1)")
-                        .HasColumnName("is_manager");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .HasColumnType("varchar(32)")
-                        .HasColumnName("name");
 
                     b.HasKey("UserId", "RoleId");
 
