@@ -3,45 +3,39 @@
 
 
 <div class="tw-flex tw-my-2">
-    @if(Grouping) {
-        <RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
-        <Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
-    }
+	@if(Grouping) {
+		<RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
+		<Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
+	}
 </div>
 <RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
-    <Columns>
-        @ChildContent
-    </Columns>
+	<Columns>
+		@ChildContent
+	</Columns>
 </RadzenDataGrid>
 
 @code {
-    [MemberNotNull]
-    protected RadzenDataGrid<TItem> Grid { get; set; } = null!;
+	[MemberNotNull]
+	protected RadzenDataGrid<TItem> Grid { get; set; } = null!;
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; } = default!;
-    [Parameter, Required, MemberNotNull]
-    public IEnumerable<TItem> Items { get; set; } = null!;
-    [Parameter]
-    public bool Filtering { get; set; } = false;
-    [Parameter]
-    public bool Sorting { get; set; } = false;
-    [Parameter]
-    public bool Grouping { get; set; } = false;
-    [Parameter]
-    public bool ResizableColumns { get; set; } = false;
-    [Parameter]
-    public bool ReorderableColumns { get; set; } = false;
-    [Parameter]
-    public bool Paging { get; set; } = false;
-    [Parameter]
-    public int PageSize { get; set; } = 10;
+	[Parameter]
+	public RenderFragment ChildContent { get; set; } = default!;
+	[Parameter, Required, MemberNotNull]
+	public IEnumerable<TItem> Items { get; set; } = null!;
+	[Parameter]
+	public bool Filtering { get; set; } = true;
+	[Parameter]
+	public bool Sorting { get; set; } = true;
+	[Parameter]
+	public bool Grouping { get; set; } = true;
+	[Parameter]
+	public bool ResizableColumns { get; set; } = true;
+	[Parameter]
+	public bool ReorderableColumns { get; set; } = true;
+	[Parameter]
+	public bool Paging { get; set; } = true;
+	[Parameter]
+	public int PageSize { get; set; } = 20;
 
-    protected TItem? InEditItem { get; set; }
-
-    protected bool GroupingEnabled { get; set; } = false;
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-    }
+	protected bool GroupingEnabled { get; set; } = false;
 }

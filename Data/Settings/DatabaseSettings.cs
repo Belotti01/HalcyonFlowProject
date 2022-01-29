@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace HalcyonFlowProject.Data.Settings {
-    public class DatabaseSettings : ICloneable {
+    public class DatabaseSettings {
         // These properties will be binded to a razor component, so initialize
         // them statically to always avoid a NullValueException.
         public string Host { get; set; } = "localhost";
@@ -34,7 +34,8 @@ namespace HalcyonFlowProject.Data.Settings {
             } catch { }
         }
 
-        public object Clone() {
+        // Not implementing ICloneable cuz it sucks
+        public DatabaseSettings Clone() {
             return new DatabaseSettings(false) {
                 Host = Host,
                 DatabaseName = DatabaseName,
@@ -43,6 +44,7 @@ namespace HalcyonFlowProject.Data.Settings {
             };
         }
 
+        public override string ToString() => GetConnectionString();
         public string GetConnectionString() {
             string connectionString = string.Concat(
                 $"server={Host};",
@@ -55,6 +57,5 @@ namespace HalcyonFlowProject.Data.Settings {
             return connectionString;
         }
 
-        public override string ToString() => GetConnectionString();
     }
 }

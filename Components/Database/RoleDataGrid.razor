@@ -1,13 +1,19 @@
 ﻿@inherits BaseDbComponent<RoleDataGrid>
 
 <CrudDataGrid TItem=@Role Items=@Roles Sorting Filtering Paging PageSize=20 ResizableColumns ReorderableColumns CanAdd CanModify CanDelete DbContext=@DbContext>
+	
 	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.Name) Title=@Translate("Name")>
 		<EditTemplate>
-			<InlineTextInput Required @bind-Value=@role.Name Label="" Placeholder="Name" Component=@nameof(Role.Name)/>
+			<InlineTextInput Required @bind-Value=@role.Name Placeholder="Name" Component=@nameof(Role.Name)/>
 		</EditTemplate>
 	</RadzenDataGridColumn>
 	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsAdministrator) Title=@Translate("Admin")>
-		
+		<Template>
+			<RadzenCheckBox Disabled Value=role.IsAdministrator/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.IsAdministrator/>
+		</EditTemplate>
 	</RadzenDataGridColumn>
 </CrudDataGrid>
 

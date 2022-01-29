@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 #nullable disable
 
 namespace HalcyonFlowProject.Data.Database.Context {
-	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
+	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IDataManipulator {
 		public ObjectContext ObjectContext => ((IObjectContextAdapter)this).ObjectContext;
 
 		public DB(DbContextOptions<DB> options)
@@ -97,60 +97,55 @@ namespace HalcyonFlowProject.Data.Database.Context {
             }
 		}
 
-		#region CRUD<T>
-		public IEnumerable<T> Get<T>() where T : class {
-			DbSet<T> set = Set<T>();
-			return set.AsEnumerable();
+		#region CRUD
+
+        public TItem CreateItem<TItem>() where TItem : class, new() {
+			DbSet<TItem> set = Set<TItem>();
+			TItem item = new();
+			set.Add(item);
+
+			return item;
 		}
 
-		public IAsyncEnumerable<T> GetAsync<T>() where T : class {
-			DbSet<T> set = Set<T>();
-			return set.AsAsyncEnumerable();
+        public void UpdateItem<TItem>(TItem item) where TItem : class, new() {
+			Entry(item).State = EntityState.Modified;
 		}
 
-		public void Add<T>(T entity, bool save = true) where T : class {
-			DbSet<T> set = Set<T>();
-			set.Add(entity);
-			if(save) {
-				SaveChanges();
+        public void DeleteItem<TItem>(TItem item) where TItem : class, new() {
+			Remove(item);
+		}
+
+        public void InsertItem<TItem>(TItem item) where TItem : class, new() {
+            Set<TItem>().Add(item);
+        }
+
+        public bool TryInsertItem<TItem>(TItem item) where TItem : class, new() {
+			bool canInsert = !ItemExists(item) && Entry(item).IsKeySet;
+			if(canInsert) {
+				InsertItem(item);
 			}
+			return canInsert;
 		}
 
-		public async Task AddAsync<T>(T entity, bool save = true) where T : class {
-			DbSet<T> set = Set<T>();
-			await set.AddAsync(entity);
-			if(save) {
-				await SaveChangesAsync();
+        public bool TryDeleteItem<TItem>(TItem item) where TItem : class, new() {
+			bool exists = ItemExists(item);
+			if(exists) {
+				DeleteItem(item);
 			}
+			return exists;
+        }
+
+		public bool ItemExists<TItem>(TItem item) where TItem : class, new() {
+			return Entry(item) is not null;
 		}
 
-		public void Update<T>(T entity, bool save = true) where T : class {
-			Entry(entity).State = EntityState.Modified;
-			if(save) {
-				SaveChanges();
-			}
-		}
-
-		public async Task UpdateAsync<T>(T entity, bool save = true) where T : class {
-			Entry(entity).State = EntityState.Modified;
-			if(save) {
-				await SaveChangesAsync();
-			}
-		}
-
-		public void Delete<T>(T entity, bool save = true) where T : class {
-			Remove(entity);
-			if(save) {
-				SaveChanges();
-			}
-		}
-
-		public async Task DeleteAsync<T>(T entity, bool save = true) where T : class {
-			Remove(entity);
-			if(save) {
-				await SaveChangesAsync();
-			}
-		}
-		#endregion
-	}
+        public void UpdateOrInsert<TItem>(TItem item) where TItem : class, new() {
+			if(ItemExists(item)) {
+				UpdateItem(item);
+			}else {
+				InsertItem(item);
+            }
+        }
+        #endregion
+    }
 }
