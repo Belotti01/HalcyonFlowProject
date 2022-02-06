@@ -8,8 +8,6 @@ using System.Data.SqlClient;
 
 namespace HalcyonFlowProject.Data.Database.Context {
 	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IDataManipulator {
-		public ObjectContext ObjectContext => ((IObjectContextAdapter)this).ObjectContext;
-
 		public DB(DbContextOptions<DB> options)
 			: base(options) {
 			Init();

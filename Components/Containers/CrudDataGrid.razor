@@ -24,7 +24,7 @@
 		}
 		@if(CanModify || CanAdd || CanDelete) {
 			<RadzenButton Style="margin-right: 4px;" Text=@Translate("Save")  Disabled=@SavingDisabled ButtonStyle=@ButtonStyle.Secondary Click=@OnSaveClick/>
-			<RadzenButton Text=@Translate("Cancel")  Disabled=@SavingDisabled ButtonStyle=@ButtonStyle.Secondary Click=@OnCancelClick/>
+			<RadzenButton Text=@Translate("Undo Changes")  Disabled=@SavingDisabled ButtonStyle=@ButtonStyle.Secondary Click=@OnCancelClick/>
 		}
 	</div>
 }
@@ -42,7 +42,8 @@
 	public DataGridEditMode EditMode { get; set; } = DataGridEditMode.Single;
 
 	protected bool Busy { get; set; } = false;
-	public bool SavingDisabled => Busy || !(createdItems.Any() || editedItems.Any() || removedItems.Any());
+	protected DbEditor<TItem> Editor { get; set; } = null!;
+	public bool SavingDisabled => Busy || !Editor.HasPendingChanges;
 
 	private TItem? _editingRow;
 	protected TItem? EditingRow {
@@ -54,63 +55,43 @@
 				}
 			}else {
 				Grid.EditRow(value).Wait();
-				if(!editedItems.Contains(value) && !createdItems.Contains(value)) {
-					editedItems.Add(value);
-				}
+				Editor.AddOrUpdate(value);
 			}
 			_editingRow = value;
 		}
 	}
-	protected readonly List<TItem> createdItems = new();
-	protected readonly List<TItem> editedItems = new();
-	protected readonly List<TItem> removedItems = new();
 
 
 	protected override async Task OnInitializedAsync() {
 		await base.OnInitializedAsync();
+		Editor = new(DbContext);
 	}
 
 	protected async Task OnAddClick(MouseEventArgs e) {
 		if(Busy) return;
 		Busy = true;
 		TItem newItem = new();
-		createdItems.Add(newItem);
-		await Grid.InsertRow(newItem);
-		EditingRow = newItem;
+		Editor.Add(newItem);
+		await Grid.Reload();
+		await Grid.SelectRow(newItem);
 		Busy = false;
 	}
 
 	protected async Task OnDeleteClick(MouseEventArgs e) {
 		if(Busy || EditingRow is null) return;
 		Busy = true;
-		
-		if(createdItems.Contains(EditingRow)) {
-			createdItems.Remove(EditingRow);
-		}else if(!removedItems.Contains(EditingRow)) {
-			if(editedItems.Contains(EditingRow)) {
-				editedItems.Remove(EditingRow);
-			}
-			removedItems.Add(EditingRow);
-			DbContext.TryDeleteItem(EditingRow);
-			await DbContext.SaveChangesAsync();
-		}
+		Editor.Remove(EditingRow);
+		EditingRow = null;
 		await Grid.Reload();
 		Busy = false;
 	}
 
-
 	protected async Task OnCancelClick(MouseEventArgs e) {
 		if(Busy) return;
 		Busy = true;
-		createdItems.Clear();
-		editedItems.Clear();
-		
-		removedItems.ForEach(x => DbContext.InsertItem(x));
-		removedItems.Clear();
-		await DbContext.SaveChangesAsync();
-
-		await Grid.Reload();
 		EditingRow = null;
+		Editor.UndoChanges();
+		await Grid.Reload();
 		Busy = false;
 	}
 
@@ -119,14 +100,7 @@
 		Busy = true;
 		EditingRow = null;
 
-		createdItems.ForEach(x => {
-			DbContext.InsertItem(x);
-		});
-		createdItems.Clear();
-		editedItems.ForEach(x => DbContext.UpdateItem(x));
-		editedItems.Clear();
-		removedItems.Clear();
-		await DbContext.SaveChangesAsync();
+		Editor.SaveChanges();
 		await Grid.Reload();
 		Busy = false;
 	}

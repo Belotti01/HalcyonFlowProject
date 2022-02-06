@@ -7,12 +7,67 @@
 			<InlineTextInput Required @bind-Value=@role.Name Placeholder="Name" Component=@nameof(Role.Name)/>
 		</EditTemplate>
 	</RadzenDataGridColumn>
+
 	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsAdministrator) Title=@Translate("Admin")>
 		<Template>
 			<RadzenCheckBox Disabled Value=role.IsAdministrator/>
 		</Template>
 		<EditTemplate>
 			<RadzenCheckBox @bind-Value=role.IsAdministrator/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsManager) Title=@Translate("Manager")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.IsManager/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.IsManager/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateProjects) Title=@Translate("Create Projects")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.CanCreateProjects/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.CanCreateProjects/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateTasks) Title=@Translate("Create Tasks")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.CanCreateTasks/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.CanCreateTasks/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateTickets) Title=@Translate("Create Tickets")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.CanCreateTickets/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.CanCreateTickets/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanAssignTasks) Title=@Translate("Assign Tasks")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.CanAssignTasks/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.CanAssignTasks/>
+		</EditTemplate>
+	</RadzenDataGridColumn>
+	
+	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanComment) Title=@Translate("Comment")>
+		<Template>
+			<RadzenCheckBox Disabled Value=role.CanComment/>
+		</Template>
+		<EditTemplate>
+			<RadzenCheckBox @bind-Value=role.CanComment/>
 		</EditTemplate>
 	</RadzenDataGridColumn>
 </CrudDataGrid>
