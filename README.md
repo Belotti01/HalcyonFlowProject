@@ -17,4 +17,4 @@ Made to run safely on both private networks and public server hosts.
 Check the _DOCS folder for information on how to try the application. A MySQL server (local or remote) is required.
 
 ## DISCLAIMER
-No license is included as this is NOT an open-source project, and distribution is strictly prohibited.
+No license is included as this is NOT an open-source project, and distribution by third-parties is strictly prohibited.
