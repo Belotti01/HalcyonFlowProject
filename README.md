@@ -1,7 +1,6 @@
 # HalcyonFlowProject
 
 ## TODO
-- Create components for the DataGridColumns' EditTemplate (TextEditTemplate, NumberEditTemplate & BoolEditTemplate).
 - Finish implementing UserRoles and the RolesDataGrid.
 - Make the Index page Database-independent (but with connection testing) to allow the correct setup of the Database's connection.
 - Create DataGrids, pages and a way to edit Teams.
