@@ -1,7 +1,7 @@
 ﻿@inherits BaseComponent<DatabaseSettingsComponent>
 
 <RadzenCard>
-<RadzenTemplateForm TItem="DatabaseSettings" Data=@Settings Submit=@TestConnection>
+<RadzenTemplateForm @ref=Form TItem="DatabaseSettings" Data=@Settings Submit=@TestConnection>
 	<!--	HOST INPUT		-->
 	<InlineInput Component="Host" Required Label="Host and Port">
 		<div class="tw-grid tw-grid-cols-12">
@@ -25,13 +25,13 @@
 	<!--	BUTTONS		-->
 	<div class="tw-flex tw-mt-2 tw-justify-center">
 		<!--	TEST CONNECTION BUTTON		-->
-		<RadzenButton class="tw-basis-4/5 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
+		<RadzenButton class="tw-basis-4/5 tw-mr-1" Disabled=@(!IsInputValid) ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
 		<!--	DB CREATION BUTTON		-->
-		<RadzenButton class="tw-basis-4/5 tw-ml-1" Disabled=@SaveDisabled ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Update Database") Click=@CreateDatabase/>
+		<RadzenButton class="tw-basis-4/5 tw-ml-1" Disabled=@(!IsInputValid) ButtonStyle=@ButtonStyle.Secondary Text=@Translate(SaveDisabled ? "Create Database" : "Update Database") Click=@CreateDatabase/>
 	</div>
 	<div class="tw-flex tw-mt-2 tw-justify-center">
 		<!--	SAVE BUTTON		-->
-		<RadzenButton class="tw-basis-1/4 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") @bind-Disabled="SaveDisabled" Click=@(x => Close(true))/>
+		<RadzenButton class="tw-basis-1/4 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") Disabled=@SaveDisabled Click=@(x => Close(true))/>
 		<!--	CANCEL BUTTON		-->
 		<RadzenButton class="tw-basis-1/4 tw-ml-1" ButtonStyle=@ButtonStyle.Light Text=@Translate("Cancel") Click=@(x => Close(false))/>
 	</div>
@@ -42,8 +42,11 @@
 	[Parameter]
 	public Action? OnSave { get; set; }
 
+	protected bool Busy { get; set; } = false;
 	protected DatabaseSettings Settings { get; set; } = new();
 	protected bool SaveDisabled { get; set; }
+	protected bool IsInputValid => Form?.IsValid ?? false;
+	protected RadzenTemplateForm<DatabaseSettings>? Form { get; set; }
 
 	protected override void OnInitialized() {
 		base.OnInitialized();
@@ -51,7 +54,7 @@
 	}
 
 	protected void ToggleSave(bool isEnabled) {
-		SaveDisabled = !isEnabled;
+		SaveDisabled = !IsInputValid || !isEnabled;
 	}
 
 	protected void Close(bool save) {
@@ -74,14 +77,17 @@
 	}
 
 	protected void CreateDatabase() {
+		Busy = true;
 		DatabaseSettings oldSettings = new();
 		try {
 			Settings.Save();
 			using DB test = new();
 			test.Database.Migrate();
+			TestConnection();
 		}catch(Exception ex) {
 			Logger?.LogError($"Could not create database '{Settings.ToString()}: {ex.Message}'");
 		}
 		oldSettings.Save();
+		Busy = false;
 	}
 }
