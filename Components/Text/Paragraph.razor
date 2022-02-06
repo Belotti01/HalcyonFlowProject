@@ -21,7 +21,7 @@
 
 	protected string BuildClass() {
 		List<string> classes = new();
-		classes.Add(Size.ToClass());
+		classes.Add(Size.ToCssClass());
 		if (Center)
 			classes.Add("tw-m-auto");
 		if (UpperCase)

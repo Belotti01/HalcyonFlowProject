@@ -83,10 +83,10 @@
 			Settings.Save();
 			using DB test = new();
 			test.Database.Migrate();
-			TestConnection();
 		}catch(Exception ex) {
 			Logger?.LogError($"Could not create database '{Settings.ToString()}: {ex.Message}'");
 		}
+		TestConnection();
 		oldSettings.Save();
 		Busy = false;
 	}

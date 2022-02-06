@@ -2,7 +2,14 @@
 
 namespace HalcyonFlowProject.Logic.Extensions {
     public static class EnumExtensions {
-        public static string ToClass(this TextSize size) {
+        /// <summary>
+        ///     Get the TailwindCSS class identified by this <see cref="TextSize"/>.
+        /// </summary>
+        /// <param name="size">The resulting text size.</param>
+        /// <returns>A <see langword="string"/> identifying the TailwindCSS class tied to
+        /// the value of the <see cref="TextSize"/>
+        /// </returns>.
+        public static string ToCssClass(this TextSize size) {
             return "tw-text-" + size switch {
                 TextSize.XS => "xs",
                 TextSize.S => "sm",
