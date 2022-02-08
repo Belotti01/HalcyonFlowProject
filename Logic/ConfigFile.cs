@@ -2,6 +2,8 @@
 
 namespace HalcyonFlowProject.Logic {
     public static class ConfigFile {
+        private const int MAX_ACTION_ATTEMPTS = 5;
+        private static DelegateResolver Delegator = new();
         private const string FOLDER = "./Config/";
         private const string EXT = ".cfg";
         public static string Database => FOLDER + "Database" + EXT;
@@ -12,11 +14,13 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file.</param>
         /// <param name="value">The content to encode and write in the file.</param>
         public static void Write(string path, string value) {
-            CreateFolder(path);
-            if(File.Exists(path)) {
-                File.Delete(path);
-            }
-            File.WriteAllText(path, Encode(value));
+            Delegator.EnqueueAction(() => {
+                CreateFolder(path);
+                if(File.Exists(path)) {
+                    File.Delete(path);
+                }
+                File.WriteAllText(path, Encode(value));
+            }, MAX_ACTION_ATTEMPTS);
         }
 
 
@@ -26,11 +30,13 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file.</param>
         /// <param name="lines">The lines to encode and write in the file.</param>
         public static void WriteLines(string path, string[] lines) {
-            CreateFolder(path);
-            if(File.Exists(path)) {
-                File.Delete(path);
-			}
-            File.WriteAllLines(path, EncodeLines(lines));
+            Delegator.EnqueueAction(() => {
+                CreateFolder(path);
+                if(File.Exists(path)) {
+                    File.Delete(path);
+			    }
+                File.WriteAllLines(path, EncodeLines(lines));
+            }, MAX_ACTION_ATTEMPTS);
         }
 
         /// <summary>

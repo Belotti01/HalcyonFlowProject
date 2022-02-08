@@ -45,9 +45,27 @@ namespace HalcyonFlowProject.Components {
                 : await Authentication.GetAuthenticationStateAsync();
         }
 
+        protected AuthenticationState? GetAuthState() {
+            var task = GetAuthStateAsync();
+            task.Wait();
+            return task.Result;
+        }
+
         protected async Task<bool> IsUserLoggedAsync() {
             return (await GetAuthStateAsync())?.User.Identity?.IsAuthenticated ?? false;
         }
+
+        protected bool IsUserLogged() {
+            var task = GetAuthStateAsync();
+            task.Wait();
+            return task.Result?.User.Identity?.IsAuthenticated ?? false;
+        }
+
+        public void LogAction(string actionMessage) {
+            var auth = GetAuthState();
+            string username = auth?.User.Identity?.Name ?? "Guest";
+            Logger?.LogInformation("User: {username} | {actionMessage}", username, actionMessage);
+		}
 
         #region Finalization
         ~BaseComponent() {
