@@ -3,9 +3,10 @@
 namespace HalcyonFlowProject.Logic {
     public static class ConfigFile {
         private const int MAX_ACTION_ATTEMPTS = 5;
-        private static DelegateResolver Delegator = new();
+        private static DelegateResolver? Delegator;
         private const string FOLDER = "./Config/";
         private const string EXT = ".cfg";
+
         public static string Database => FOLDER + "Database" + EXT;
 
         /// <summary>
@@ -14,7 +15,9 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file.</param>
         /// <param name="value">The content to encode and write in the file.</param>
         public static void Write(string path, string value) {
-            Delegator.EnqueueAction(() => {
+            InitializeDelegator();
+
+            Delegator!.EnqueueAction(() => {
                 CreateFolder(path);
                 if(File.Exists(path)) {
                     File.Delete(path);
@@ -30,11 +33,13 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file.</param>
         /// <param name="lines">The lines to encode and write in the file.</param>
         public static void WriteLines(string path, string[] lines) {
-            Delegator.EnqueueAction(() => {
+            InitializeDelegator();
+            
+            Delegator!.EnqueueAction(() => {
                 CreateFolder(path);
                 if(File.Exists(path)) {
                     File.Delete(path);
-			    }
+                }
                 File.WriteAllLines(path, EncodeLines(lines));
             }, MAX_ACTION_ATTEMPTS);
         }
@@ -56,10 +61,10 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file to read.</param>
         /// <returns>The decoded lines of the file, or an empty array if the file doesn't exist.</returns>
         public static string[] ReadLines(string path) {
-			return string.IsNullOrWhiteSpace(path) || File.Exists(path) 
-                ? DecodeLines(File.ReadAllLines(path)) 
+            return string.IsNullOrWhiteSpace(path) || File.Exists(path)
+                ? DecodeLines(File.ReadAllLines(path))
                 : Array.Empty<string>();
-		}
+        }
 
 
 
@@ -81,7 +86,7 @@ namespace HalcyonFlowProject.Logic {
         /// <returns>The BASE64-encoded lines.</returns>
         private static string[] EncodeLines(params string[] lines) {
             string[] result = new string[lines.Length];
-            for (int i = 0; i < result.Length; i++) {
+            for(int i = 0; i < result.Length; i++) {
                 result[i] = Encode(lines[i]);
             }
             return result;
@@ -106,7 +111,7 @@ namespace HalcyonFlowProject.Logic {
         /// <returns>The plain text.</returns>
         private static string[] DecodeLines(params string[] lines) {
             string[] result = new string[lines.Length];
-            for (int i = 0; i < result.Length; i++) {
+            for(int i = 0; i < result.Length; i++) {
                 result[i] = Decode(lines[i]);
             }
             return result;
@@ -122,6 +127,19 @@ namespace HalcyonFlowProject.Logic {
 
             if(folder is null) return;
             Directory.CreateDirectory(folder);
+        }
+
+        private static void InitializeDelegator() {
+            if(Delegator?.DisposeOnFinish ?? false) {
+                // Wait for the current delegator to be disposed internally
+                while(!Delegator.Disposed) {
+                    Thread.Sleep(100);
+                }
+            }
+
+            if(Delegator?.Disposed ?? true) {
+                Delegator = new();
+            }
         }
     }
 }

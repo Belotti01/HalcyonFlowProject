@@ -89,12 +89,4 @@
 		Roles ??= DbContext?.Roles ?? Enumerable.Empty<Role>();
 	}
 
-	protected async Task ReloadRole(Role role) {
-		if(DbContext is not null) {
-			await DbContext.Entry(role).ReloadAsync();
-		}else {
-			Logger?.LogError($"The DbContext was not passed to the {nameof(RoleDataGrid)} and the data could not be updated.");
-		}
-	}
-
 }

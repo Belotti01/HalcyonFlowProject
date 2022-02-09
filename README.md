@@ -11,6 +11,8 @@ Made to run safely on both private networks and public server hosts.
 - Create DataGrids, pages and a way to edit Teams.
 - Plan the creation of the Projects, Tasks and Tickets environment.
 - Analysis of the services and their implementation.
+- Notifications system
+- Chat (?) system
 - Adapt to run with either a MySQL, MSSQL or SQLite database.
 - (Future) Create an online-hosted database to be used by multiple users at a time.
 
