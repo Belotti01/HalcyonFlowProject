@@ -1,21 +1,23 @@
 ﻿@inherits BaseDbComponent<UserDataGrid>
 
 <DataGrid TItem=@User Items=@Users Sorting Filtering Paging Grouping PageSize=20 ResizableColumns ReorderableColumns>
-	<RadzenDataGridColumn TItem=@User Property=@nameof(User.UserName) Title=@Translate("Username")/>
-	<RadzenDataGridColumn TItem=@User Property=@nameof(User.FullName) Title=@Translate("Full Name")/>
-	<RadzenDataGridColumn TItem=@User Property=@nameof(User.PhoneNumber) Title=@Translate("Phone")/>
-	<RadzenDataGridColumn TItem=@User Property=@nameof(User.RoleId) Title=@Translate("Role")>
-		<Template Context="User">
-			@(User.GetRole(DbContext)?.Name ?? "");
-		</Template>
-	</RadzenDataGridColumn>
-	@if(ShowEditColumn) {
-		<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false Resizable=false Reorderable=false>
+	<Columns>
+		<RadzenDataGridColumn TItem=@User Property=@nameof(User.UserName) Title=@Translate("Username")/>
+		<RadzenDataGridColumn TItem=@User Property=@nameof(User.FullName) Title=@Translate("Full Name")/>
+		<RadzenDataGridColumn TItem=@User Property=@nameof(User.PhoneNumber) Title=@Translate("Phone")/>
+		<RadzenDataGridColumn TItem=@User Property=@nameof(User.RoleId) Title=@Translate("Role")>
 			<Template Context="User">
-				<OpenDialogButton OnDialogClose=@((x) => ReloadUser(User)) TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User }, { "DbContext", DbContext } })/>
+				@(User.GetRole(DbContext!)?.Name ?? "");
 			</Template>
 		</RadzenDataGridColumn>
-	}
+		@if(ShowEditColumn) {
+			<RadzenDataGridColumn TItem=@User Title="" Sortable=false Filterable=false Groupable=false Resizable=false Reorderable=false>
+				<Template Context="User">
+					<OpenDialogButton OnDialogClose=@((x) => ReloadUser(User)) TDialog=@UserEditor ButtonText="Edit" DialogParameters=@(new() { { "User", User }, { "DbContext", DbContext } })/>
+				</Template>
+			</RadzenDataGridColumn>
+		}
+	</Columns>
 </DataGrid>
 
 @code {
@@ -36,7 +38,7 @@
 	}
 
 	protected async Task ReloadUser(User user) {
-		await DbContext.Entry(user).ReloadAsync();
+		await DbContext!.Entry(user).ReloadAsync();
 	}
 
 }

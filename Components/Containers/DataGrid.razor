@@ -7,10 +7,11 @@
 		<RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
 		<Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
 	}
+	@CheckBoxes
 </div>
 <RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.")>
 	<Columns>
-		@ChildContent
+		@Columns
 	</Columns>
 </RadzenDataGrid>
 
@@ -19,7 +20,9 @@
 	protected RadzenDataGrid<TItem> Grid { get; set; } = null!;
 
 	[Parameter]
-	public RenderFragment ChildContent { get; set; } = default!;
+	public RenderFragment Columns { get; set; } = default!;
+	[Parameter]
+	public RenderFragment CheckBoxes { get; set; } = default!;
 	[Parameter, Required, MemberNotNull]
 	public IEnumerable<TItem> Items { get; set; } = null!;
 	[Parameter]

@@ -2,74 +2,84 @@
 
 <CrudDataGrid TItem=@Role Items=@Roles Sorting Filtering Paging PageSize=20 ResizableColumns ReorderableColumns CanAdd CanModify CanDelete DbContext=@DbContext>
 	
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.Name) Title=@Translate("Name")>
-		<EditTemplate>
-			<InlineTextInput Required @bind-Value=@role.Name Placeholder="Name" Component=@nameof(Role.Name)/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+	<CheckBoxes>
+		<RadzenCheckBox @bind-Value=ShowRoleType Name="Role Type"/>
+		<Paragraph Text=@Translate("Show Role Types") Size=@TextSize.Base Class="tw-ml-2"/>
+		
+		<RadzenCheckBox @bind-Value=ShowPermissions Name="Permissions"/>
+		<Paragraph Text=@Translate("Show Permissions") Size=@TextSize.Base Class="tw-ml-2"/>
+	</CheckBoxes>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsAdministrator) Title=@Translate("Admin")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.IsAdministrator/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.IsAdministrator/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+	<Columns>
+		<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.Name) Title=@Translate("Name")>
+			<EditTemplate>
+				<InlineTextInput Required @bind-Value=@role.Name Placeholder="Name" Component=@nameof(Role.Name)/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.IsManager) Title=@Translate("Manager")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.IsManager/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.IsManager/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowRoleType TItem=@Role Property=@nameof(Role.IsAdministrator) Title=@Translate("Admin")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.IsAdministrator/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.IsAdministrator/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateProjects) Title=@Translate("Create Projects")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.CanCreateProjects/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.CanCreateProjects/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowRoleType TItem=@Role Property=@nameof(Role.IsManager) Title=@Translate("Manager")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.IsManager/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.IsManager/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateTasks) Title=@Translate("Create Tasks")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.CanCreateTasks/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.CanCreateTasks/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowPermissions TItem=@Role Property=@nameof(Role.CanCreateProjects) Title=@Translate("Create Projects")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.CanCreateProjects/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.CanCreateProjects/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanCreateTickets) Title=@Translate("Create Tickets")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.CanCreateTickets/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.CanCreateTickets/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowPermissions TItem=@Role Property=@nameof(Role.CanCreateTasks) Title=@Translate("Create Tasks")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.CanCreateTasks/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.CanCreateTasks/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanAssignTasks) Title=@Translate("Assign Tasks")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.CanAssignTasks/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.CanAssignTasks/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowPermissions TItem=@Role Property=@nameof(Role.CanCreateTickets) Title=@Translate("Create Tickets")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.CanCreateTickets/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.CanCreateTickets/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
+
+		<RadzenDataGridColumn Context="role" Visible=ShowPermissions TItem=@Role Property=@nameof(Role.CanAssignTasks) Title=@Translate("Assign Tasks")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.CanAssignTasks/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.CanAssignTasks/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
 	
-	<RadzenDataGridColumn Context="role" TItem=@Role Property=@nameof(Role.CanComment) Title=@Translate("Comment")>
-		<Template>
-			<RadzenCheckBox Disabled Value=role.CanComment/>
-		</Template>
-		<EditTemplate>
-			<RadzenCheckBox @bind-Value=role.CanComment/>
-		</EditTemplate>
-	</RadzenDataGridColumn>
+		<RadzenDataGridColumn Context="role" Visible=ShowPermissions TItem=@Role Property=@nameof(Role.CanComment) Title=@Translate("Comment")>
+			<Template>
+				<RadzenCheckBox Disabled Value=role.CanComment/>
+			</Template>
+			<EditTemplate>
+				<RadzenCheckBox @bind-Value=role.CanComment/>
+			</EditTemplate>
+		</RadzenDataGridColumn>
+	</Columns>
 </CrudDataGrid>
 
 @code {
@@ -83,6 +93,9 @@
 	/// </summary>
 	[Parameter]
 	public IEnumerable<Role> Roles { get; set; } = null!;
+
+	protected bool ShowRoleType { get; set; } = true;
+	protected bool ShowPermissions { get; set; }
 
 	protected override void OnInitialized() {
 		base.OnInitialized();

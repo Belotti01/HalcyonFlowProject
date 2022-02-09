@@ -16,15 +16,15 @@
     public User User { get; set; } = new();
 
     protected async Task Save() {
-        if(DbContext?.Users.Find(User.Id) is null) {
-            DbContext?.Users.Add(User);
+        if(DbContext!.Users.Find(User.Id) is null) {
+            DbContext!.Users.Add(User);
         }else {
-            DbContext.Entry(User).State = EntityState.Modified;
+            DbContext!.Entry(User).State = EntityState.Modified;
         }
-        await DbContext?.SaveChangesAsync(true);
+        await DbContext!.SaveChangesAsync(true);
     }
 
     protected async Task Revert() {
-        await DbContext?.Entry(User).ReloadAsync();
+        await DbContext!.Entry(User).ReloadAsync();
     }
 }

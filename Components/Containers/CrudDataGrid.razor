@@ -6,11 +6,12 @@
 		<RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
 		<Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
 	}
+	@CheckBoxes
 </div>
 
 <RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.") EditMode=@EditMode RowDoubleClick=OnRowDoubleClick>
 	<Columns>
-		@ChildContent
+		@Columns
 	</Columns>
 </RadzenDataGrid>
 
