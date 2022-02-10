@@ -1,15 +1,43 @@
 ﻿@inherits DataGrid<TItem>
 @typeparam TItem where TItem : class, new()
 
-<div class="tw-flex tw-my-2">
+<div class="tw-flex tw-my-2 tw-justify-between">
 	@if(Grouping) {
-		<RadzenCheckBox TValue=@bool @bind-Value=@GroupingEnabled/>
-		<Paragraph Text="Enable grouping" Size=@TextSize.Base Class="tw-ml-2"/>
+		<InlineCheckBox @bind-Value=GroupingEnabled Text="Enable Grouping"/>
 	}
 	@CheckBoxes
 </div>
 
-<RadzenDataGrid @ref=@Grid TItem=@TItem Data=@Items AllowColumnReorder=@ReorderableColumns AllowColumnResize=@ResizableColumns AllowGrouping=@(Grouping && GroupingEnabled) AllowFiltering=@Filtering AllowSorting=@Sorting AllowPaging=@Paging PageSize=@PageSize EmptyText=@Translate("No records found.") EditMode=@EditMode RowDoubleClick=OnRowDoubleClick>
+<RadzenDataGrid AndOperatorText=@Translate("And") 
+				OrOperatorText=@Translate("Or")
+				ApplyFilterText=@Translate("Apply")
+				DoesNotContainText=@Translate("Does not contain")
+				ClearFilterText=@Translate("Clear")
+				ContainsText=@Translate("Contains")
+				EndsWithText=@Translate("Ends with")
+				StartsWithText=@Translate("Starts with")
+				FilterText=@Translate("Filter")
+				EqualsText=@Translate("Equals")
+				GreaterThanOrEqualsText=@Translate("Greater than or Equals")
+				GreaterThanText=@Translate("Greater than")
+				GroupPanelText=@Translate("Drag a column here to group items")
+				LessThanOrEqualsText=@Translate("Less than or Equals")
+				LessThanText=@Translate("Less than")
+				NotEqualsText=@Translate("Not Equals")
+				IsNullText=@Translate("Is Null")
+				IsNotNullText=@Translate("Is not Null")
+				@ref=@Grid 
+				TItem=@TItem 
+				Data=@Items 
+				AllowColumnReorder=@ReorderableColumns 
+				AllowColumnResize=@ResizableColumns 
+				AllowGrouping=@(Grouping && GroupingEnabled) 
+				AllowFiltering=@Filtering 
+				AllowSorting=@Sorting 
+				AllowPaging=@Paging 
+				PageSize=@PageSize 
+				EmptyText=@Translate("No records found.")
+				RowDoubleClick=OnRowDoubleClick>
 	<Columns>
 		@Columns
 	</Columns>
@@ -74,7 +102,7 @@
 		TItem newItem = new();
 		Editor.Add(newItem);
 		await Grid.Reload();
-		await Grid.SelectRow(newItem);
+		await Grid.EditRow(newItem);
 		Busy = false;
 	}
 

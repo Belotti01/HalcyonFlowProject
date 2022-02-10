@@ -1,0 +1,21 @@
+﻿@inherits BaseComponent<InlineCheckBox>
+
+<div class="tw-flex">
+    <RadzenCheckBox TValue=bool @bind-Value=Value Name=Text Change=OnValueChanged/>
+    <Paragraph Class="tw-ml-1" Text=@Translate(Text)/>
+</div>
+
+@code {
+    [Parameter, Required]
+    public bool Value { get; set; }
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+    [Parameter]
+    public EventCallback<bool> ValueChanged { get; set; }
+
+    protected async Task OnValueChanged(bool value) {
+        if(ValueChanged.HasDelegate) {
+            await ValueChanged.InvokeAsync(value);
+        }
+    }
+}

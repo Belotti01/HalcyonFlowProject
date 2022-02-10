@@ -439,10 +439,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-row: span 2 / span 2;
 }
 
-.tw-row-span-full {
-  grid-row: 1 / -1;
-}
-
 .tw-m-auto {
   margin: auto;
 }
@@ -473,18 +469,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: 0.25rem;
 }
 
-.tw-mr-2 {
-  margin-right: 0.5rem;
-}
-
-.tw-mr-0 {
-  margin-right: 0px;
-}
-
-.tw-block {
-  display: block;
-}
-
 .tw-flex {
   display: flex;
 }
@@ -495,10 +479,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .tw-w-full {
   width: 100%;
-}
-
-.tw-grow {
-  flex-grow: 1;
 }
 
 .tw-basis-1\/6 {
@@ -513,14 +493,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   flex-basis: 25%;
 }
 
-.tw-basis-1\/5 {
-  flex-basis: 20%;
-}
-
-.tw-basis-1\/3 {
-  flex-basis: 33.333333%;
-}
-
 .tw-grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -533,27 +505,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   flex-direction: column;
 }
 
-.tw-justify-end {
-  justify-content: flex-end;
-}
-
 .tw-justify-center {
   justify-content: center;
 }
 
-.tw-justify-evenly {
-  justify-content: space-evenly;
+.tw-justify-between {
+  justify-content: space-between;
 }
 
 .tw-space-y-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
-}
-
-.tw-bg-blue-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(147 197 253 / var(--tw-bg-opacity));
 }
 
 .tw-text-xs {

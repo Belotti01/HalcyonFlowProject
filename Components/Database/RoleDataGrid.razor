@@ -3,11 +3,8 @@
 <CrudDataGrid TItem=@Role Items=@Roles Sorting Filtering Paging PageSize=20 ResizableColumns ReorderableColumns CanAdd CanModify CanDelete DbContext=@DbContext>
 	
 	<CheckBoxes>
-		<RadzenCheckBox @bind-Value=ShowRoleType Name="Role Type"/>
-		<Paragraph Text=@Translate("Show Role Types") Size=@TextSize.Base Class="tw-ml-2"/>
-		
-		<RadzenCheckBox @bind-Value=ShowPermissions Name="Permissions"/>
-		<Paragraph Text=@Translate("Show Permissions") Size=@TextSize.Base Class="tw-ml-2"/>
+		<InlineCheckBox @bind-Value=ShowRoleType Text=@Translate("Show Role Types")/>
+		<InlineCheckBox @bind-Value=ShowPermissions Text=@Translate("Show Permissions")/>
 	</CheckBoxes>
 
 	<Columns>
