@@ -1,13 +1,12 @@
 ﻿using HalcyonFlowProject.Data.Settings;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Data.Entity.Core;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+
 #nullable disable
 
 namespace HalcyonFlowProject.Data.Database.Context {
-	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IDataManipulator {
+	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
 		public DB(DbContextOptions<DB> options)
 			: base(options) {
 			Init();
@@ -95,55 +94,6 @@ namespace HalcyonFlowProject.Data.Database.Context {
             }
 		}
 
-		#region CRUD
-
-        public TItem CreateItem<TItem>() where TItem : class, new() {
-			DbSet<TItem> set = Set<TItem>();
-			TItem item = new();
-			set.Add(item);
-
-			return item;
-		}
-
-        public void UpdateItem<TItem>(TItem item) where TItem : class, new() {
-			Entry(item).State = EntityState.Modified;
-		}
-
-        public void DeleteItem<TItem>(TItem item) where TItem : class, new() {
-			Remove(item);
-		}
-
-        public void InsertItem<TItem>(TItem item) where TItem : class, new() {
-            Set<TItem>().Add(item);
-        }
-
-        public bool TryInsertItem<TItem>(TItem item) where TItem : class, new() {
-			bool canInsert = !ItemExists(item) && Entry(item).IsKeySet;
-			if(canInsert) {
-				InsertItem(item);
-			}
-			return canInsert;
-		}
-
-        public bool TryDeleteItem<TItem>(TItem item) where TItem : class, new() {
-			bool exists = ItemExists(item);
-			if(exists) {
-				DeleteItem(item);
-			}
-			return exists;
-        }
-
-		public bool ItemExists<TItem>(TItem item) where TItem : class, new() {
-			return Entry(item) is not null;
-		}
-
-        public void UpdateOrInsert<TItem>(TItem item) where TItem : class, new() {
-			if(ItemExists(item)) {
-				UpdateItem(item);
-			}else {
-				InsertItem(item);
-            }
-        }
-        #endregion
+		
     }
 }

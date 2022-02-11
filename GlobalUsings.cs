@@ -17,12 +17,12 @@ global using HalcyonFlowProject.Logic;
 global using HalcyonFlowProject.Pages;
 global using HalcyonFlowProject.Shared;
 global using HalcyonFlowProject.Interfaces;
-global using HalcyonFlowProject.Data.Enums;
 global using HalcyonFlowProject.Components;
 global using HalcyonFlowProject.Data.Database;
 global using HalcyonFlowProject.Areas.Identity;
-global using HalcyonFlowProject.Logic.Extensions;
 global using HalcyonFlowProject.Components.Buttons;
 global using HalcyonFlowProject.Components.Settings;
 global using HalcyonFlowProject.Data.Database.Tables;
 global using HalcyonFlowProject.Data.Database.Context;
+
+global using NLRazor.Utils;

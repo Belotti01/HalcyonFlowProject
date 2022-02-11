@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalcyonFlowProject", "HalcyonFlowProject.csproj", "{B50232CC-07D4-4DC9-BA01-0A1F537CE05E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLRazor", "..\NLRazor\NLRazor.csproj", "{9ACBACE9-7773-467F-9795-DB33487AD5E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalcyonServices", "..\HalcyonServices\HalcyonServices.csproj", "{3891989E-AC95-4C9F-9B24-3630C7EC21BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{B50232CC-07D4-4DC9-BA01-0A1F537CE05E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B50232CC-07D4-4DC9-BA01-0A1F537CE05E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B50232CC-07D4-4DC9-BA01-0A1F537CE05E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ACBACE9-7773-467F-9795-DB33487AD5E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ACBACE9-7773-467F-9795-DB33487AD5E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ACBACE9-7773-467F-9795-DB33487AD5E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ACBACE9-7773-467F-9795-DB33487AD5E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3891989E-AC95-4C9F-9B24-3630C7EC21BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3891989E-AC95-4C9F-9B24-3630C7EC21BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3891989E-AC95-4C9F-9B24-3630C7EC21BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3891989E-AC95-4C9F-9B24-3630C7EC21BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

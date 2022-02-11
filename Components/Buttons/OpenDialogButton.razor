@@ -20,9 +20,16 @@
 	public EventCallback<dynamic?> OnDialogClose { get; set; }
 
 	protected virtual async Task OpenDialogAsync() {
-		var result = await DialogService?.OpenAsync<TDialog>(DialogTitle, DialogParameters);
-		if(OnDialogClose.HasDelegate) {
-			await OnDialogClose.InvokeAsync(result);
+		if(DialogService is not null) {
+			var result = await DialogService.OpenAsync<TDialog>(DialogTitle, DialogParameters);
+			if(OnDialogClose.HasDelegate) {
+				await OnDialogClose.InvokeAsync(result);
+			}
 		}
+#if DEBUG
+		else {
+			throw new Exception("The DialogService has not been injected.");
+		}
+#endif
 	}
 }
