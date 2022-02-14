@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalcyonFlowProject", "Halcy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NLRazor", "..\NLRazor\NLRazor.csproj", "{9ACBACE9-7773-467F-9795-DB33487AD5E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HalcyonServices", "..\HalcyonServices\HalcyonServices.csproj", "{3891989E-AC95-4C9F-9B24-3630C7EC21BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HalcyonServices", "..\HalcyonServices\HalcyonServices.csproj", "{3891989E-AC95-4C9F-9B24-3630C7EC21BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,12 +2,21 @@
 
 namespace HalcyonFlowProject.Logic {
     public static class ConfigFile {
+        // Due to files being accessible from multiple sources, retry 
+        // write operations up to MAX_ACTION_ATTEMPTS times with a DelegateResolver.
         private const int MAX_ACTION_ATTEMPTS = 5;
         private static DelegateResolver? Delegator;
-        private const string FOLDER = "./Config/";
-        private const string EXT = ".cfg";
 
-        public static string Database => FOLDER + "Database" + EXT;
+        private static readonly string FOLDER = Path.Combine(Environment.CurrentDirectory, "Config");
+        private const string EXTENSION = ".cfg";
+
+        #region Filepaths
+        // Getters of the absolute filepaths to the configuration files.
+        // Should always start with the FOLDER path, and use the preset EXTENSION.
+        
+        /// <summary>Absolute path to the file containing database connection information.</summary>
+        public static string Database => Path.Combine(FOLDER, $"Database{EXTENSION}");
+        #endregion
 
         /// <summary>
         /// Write the encoded <paramref name="value"/> into the file identified by its <paramref name="path"/>.
@@ -130,6 +139,8 @@ namespace HalcyonFlowProject.Logic {
         }
 
         private static void InitializeDelegator() {
+            // Replace the delegator with a new one, only if it's disposed or
+            // about to be.
             if(Delegator?.DisposeOnFinish ?? false) {
                 // Wait for the current delegator to be disposed internally
                 while(!Delegator.Disposed) {
