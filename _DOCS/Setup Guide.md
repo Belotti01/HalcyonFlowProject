@@ -1,4 +1,3 @@
----
 - To properly implement tailwind while debugging:
 On VS startup, run the following command from the CLI:
 ```
