@@ -3,7 +3,9 @@ On VS startup, run the following command from the CLI:
 tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch
 		
 		
-### DEPRECATED INFORMATION - THE DATABASE CAN BE INITIALIZED BY SIMPLY RUNNING THE PROGRAM AND FILLING IN THE REQUESTED INFORMATION
+#### DEPRECATED INFORMATION - THE DATABASE CAN BE INITIALIZED BY SIMPLY RUNNING THE PROGRAM AND FILLING IN THE REQUESTED INFORMATION
+Leaving this information here in case it's required for testing.
+
 | To setup the database to handle accounts |
 |---|
 | 	0. Make sure the 'database' info explained above points to the correct schema |
@@ -13,6 +15,9 @@ tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch
 		remove-migration
 		add-migration 'databaseMigration'
 		Update-Database
-	remove-migration:	Resets the migration status as the database is yet to be created
-	add-migration:		Creates or updates the migration file to include the latest edits
-	update-database:	Creates the schema (if missing) and all the required tables 
+		
+| Command | Description |
+|---| --- |
+| remove-migration | Resets the migration status as the database is yet to be created |
+| add-migration | Creates or updates the migration file to include the latest edits |
+| update-database | Creates the schema (if missing) and all the required tables |
