@@ -1,6 +1,8 @@
 - To properly implement tailwind while debugging:
 On VS startup, run the following command from the CLI:
+```
 tw -i .\wwwroot\css\app.css -o .\wwwroot\css\app.min.css --watch
+```
 		
 		
 #### DEPRECATED INFORMATION - THE DATABASE CAN BE INITIALIZED BY SIMPLY RUNNING THE PROGRAM AND FILLING IN THE REQUESTED INFORMATION
