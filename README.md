@@ -6,11 +6,13 @@ Originally oriented towards MySQL, but extendable to MSSQL, SQLite, MariaSQL and
 Made to run safely on both private networks and public server hosts.
 
 ## REQUIREMENTS FOR TESTING
+Testing is restricted to authorized people, as external DLLs (which I provide privately) are required. 
+Other than those files, the following are required:
 - Any of the most popular browsers (using older or more unhortodox browsers can result in the pages not rendering correctly)
-- Visual Studio (2019/2022) with all components needed to compile and run .NET 6, ASP.NET and Blazor Server
+- Visual Studio 2022 (or 2019, as long as it complies with the following) with all the components needed to compile and run .NET 6, ASP.NET and Blazor Server
 - A MySQL instance running either locally or remotely
 
-*Check the _DOCS folder for information on how to try the application.
+*Check the _DOCS folder for additional information.
 
 ## TODO
 - Create DataGrids, pages and a way to edit Teams.
@@ -19,6 +21,7 @@ Made to run safely on both private networks and public server hosts.
 - Notifications & Reminders system
 - Messaging system
 - Adapt to run with either a MySQL, MSSQL or SQLite database.
+- Microservices (starting from data conversion)
 - (Future) Create an online-hosted database to be used by multiple users at a time.
 
 ## LICENSING
