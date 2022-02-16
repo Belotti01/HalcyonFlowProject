@@ -16,7 +16,6 @@ global using HalcyonFlowProject.Data;
 global using HalcyonFlowProject.Logic;
 global using HalcyonFlowProject.Pages;
 global using HalcyonFlowProject.Shared;
-global using HalcyonFlowProject.Interfaces;
 global using HalcyonFlowProject.Components;
 global using HalcyonFlowProject.Data.Database;
 global using HalcyonFlowProject.Areas.Identity;
