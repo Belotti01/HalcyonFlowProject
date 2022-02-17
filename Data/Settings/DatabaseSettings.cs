@@ -16,14 +16,30 @@ namespace HalcyonFlowProject.Data.Settings {
             }
         }
 
-        public void Save() {
+        /// <summary>
+        /// Save the settings to the database configuration file.
+        /// </summary>
+        public void Save() => Save(ConfigFile.Database);
+        /// <summary>
+        /// Save the settings to a custom configuration file.
+        /// </summary>
+        /// <param name="filepath">The path to the configuration file.</param>
+        public void Save(string filepath) {
             try {
                 string[] data = { Host, DatabaseName, Username, Password };
                 ConfigFile.WriteLines(ConfigFile.Database, data);
             }catch { }
         }
 
-        public void Load() {
+        /// <summary>
+        /// Load the settings from the database configuration file.
+        /// </summary>
+        public void Load() => Load(ConfigFile.Database);
+        /// <summary>
+        /// Load the settings from a custom configuration file.
+        /// </summary>
+        /// <param name="filepath">The path to the configuration file.</param>
+        public void Load(string filepath) {
             string[] data;
             try {
                 data = ConfigFile.ReadLines(ConfigFile.Database);

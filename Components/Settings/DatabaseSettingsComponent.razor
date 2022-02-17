@@ -25,13 +25,13 @@
 	<!--	BUTTONS		-->
 	<div class="tw-flex tw-mt-2 tw-justify-center">
 		<!--	TEST CONNECTION BUTTON		-->
-		<RadzenButton class="tw-basis-4/5 tw-mr-1" Disabled=@(!IsInputValid) ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
+		<RadzenButton class="tw-basis-4/5 tw-mr-1" Disabled=@(!IsInputValid || Busy) ButtonStyle=@ButtonStyle.Secondary ButtonType="ButtonType.Submit" Text=@Translate("Attempt Connection")/>
 		<!--	DB CREATION BUTTON		-->
-		<RadzenButton class="tw-basis-4/5 tw-ml-1" Disabled=@(!IsInputValid) ButtonStyle=@ButtonStyle.Secondary Text=@Translate(SaveDisabled ? "Create Database" : "Update Database") Click=@CreateDatabase/>
+		<RadzenButton class="tw-basis-4/5 tw-ml-1" Disabled=@(!IsInputValid || Busy) ButtonStyle=@ButtonStyle.Secondary Text=@Translate(SaveDisabled ? "Create Database" : "Update Database") Click=@CreateDatabase/>
 	</div>
 	<div class="tw-flex tw-mt-2 tw-justify-center">
 		<!--	SAVE BUTTON		-->
-		<RadzenButton class="tw-basis-1/4 tw-mr-1" ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") Disabled=@SaveDisabled Click=@(x => Close(true))/>
+		<RadzenButton class="tw-basis-1/4 tw-mr-1" Disabled=@(SaveDisabled || Busy) ButtonStyle=@ButtonStyle.Secondary Text=@Translate("Save") Click=@(x => Close(true))/>
 		<!--	CANCEL BUTTON		-->
 		<RadzenButton class="tw-basis-1/4 tw-ml-1" ButtonStyle=@ButtonStyle.Light Text=@Translate("Cancel") Click=@(x => Close(false))/>
 	</div>
@@ -42,6 +42,7 @@
 	[Parameter]
 	public Action? OnSave { get; set; }
 
+	protected bool UpdateRequired { get; set; } = false;
 	protected bool Busy { get; set; } = false;
 	protected DatabaseSettings Settings { get; set; } = new();
 	protected bool SaveDisabled { get; set; }
@@ -53,8 +54,8 @@
 		TestConnection();
 	}
 
-	protected void ToggleSave(bool isEnabled) {
-		SaveDisabled = !IsInputValid || !isEnabled;
+	protected void ToggleSave(bool enable) {
+		SaveDisabled = (!IsInputValid && !UpdateRequired) || !enable;
 	}
 
 	protected void Close(bool save) {
@@ -66,14 +67,15 @@
 	}
 
 	protected void TestConnection() {
+		Busy = true;
 		bool canConnect = DB.CanConnect(Settings, false);
 		if(canConnect) {
-			if(!DB.CanConnect(Settings, true)) {
-				//TODO: check that the database is compatible with the environment; then
-				// request the user whether to setup the database or not, if necessary.
-			}
+			Logger?.LogInformation("Testing connection to: {0}", Settings.GetConnectionString());
+			// Now check that the tables required are present.
+			UpdateRequired = !DB.CanConnect(Settings, true);
 		}
 		ToggleSave(canConnect);
+		Busy = false;
 	}
 
 	protected void CreateDatabase() {
@@ -83,6 +85,7 @@
 			Settings.Save();
 			using DB test = new();
 			test.Database.Migrate();
+			UpdateRequired = false;
 		}catch(Exception ex) {
 			Logger?.LogError($"Could not create database '{Settings.ToString()}: {ex.Message}'");
 		}

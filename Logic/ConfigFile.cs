@@ -6,6 +6,7 @@ namespace HalcyonFlowProject.Logic {
         // write operations up to MAX_ACTION_ATTEMPTS times with a DelegateResolver.
         private const int MAX_ACTION_ATTEMPTS = 5;
         private static DelegateResolver? Delegator;
+        private static SafeFileReader? Reader;
 
         private static readonly string FOLDER = Path.Combine(Environment.CurrentDirectory, "Config");
         private const string EXTENSION = ".cfg";
@@ -13,9 +14,10 @@ namespace HalcyonFlowProject.Logic {
         #region Filepaths
         // Getters of the absolute filepaths to the configuration files.
         // Should always start with the FOLDER path, and use the preset EXTENSION.
-        
+
         /// <summary>Absolute path to the file containing database connection information.</summary>
         public static string Database => Path.Combine(FOLDER, $"Database{EXTENSION}");
+        public static string DatabaseTesting => Path.Combine(FOLDER, $"DatabaseTesting{EXTENSION}");
         #endregion
 
         /// <summary>
@@ -59,8 +61,10 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file to read.</param>
         /// <returns>The decoded content of the file, or an empty <see langword="string"/> if the file doesn't exist.</returns>
         public static string Read(string path) {
+            InitializeReader();
+
             return string.IsNullOrWhiteSpace(path) || File.Exists(path)
-                ? Decode(File.ReadAllText(path))
+                ? Decode(Reader!.Read(path))
                 : string.Empty;
         }
 
@@ -70,8 +74,10 @@ namespace HalcyonFlowProject.Logic {
         /// <param name="path">The path to the file to read.</param>
         /// <returns>The decoded lines of the file, or an empty array if the file doesn't exist.</returns>
         public static string[] ReadLines(string path) {
+            InitializeReader();
+
             return string.IsNullOrWhiteSpace(path) || File.Exists(path)
-                ? DecodeLines(File.ReadAllLines(path))
+                ? DecodeLines(Reader!.ReadLines(path))
                 : Array.Empty<string>();
         }
 
@@ -151,6 +157,10 @@ namespace HalcyonFlowProject.Logic {
             if(Delegator?.Disposed ?? true) {
                 Delegator = new();
             }
+        }
+
+        private static void InitializeReader() {
+            Reader ??= new(Path.Combine(FOLDER, "Temp"));
         }
     }
 }

@@ -7,14 +7,16 @@ using System.Data.SqlClient;
 
 namespace HalcyonFlowProject.Data.Database.Context {
 	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
-		public DB(DbContextOptions<DB> options)
+		protected bool IsMockObject = false;
+
+		public DB(DbContextOptions<DB> options, bool useTestConfig = false)
 			: base(options) {
-			Init();
+			IsMockObject = useTestConfig;
 		}
 
-		public DB()
+		public DB(bool useTestConfig = false)
 			: base() {
-			Init();
+			IsMockObject = useTestConfig;
 		}
 
 		/// <summary>
@@ -33,27 +35,26 @@ namespace HalcyonFlowProject.Data.Database.Context {
 		///		exists, <see langword="false"/> otherwise.
 		/// </returns>
 		public static bool CanConnect(DatabaseSettings settings, bool verifyTables) {
-			DatabaseSettings oldSettings = new(true);
 			bool canConnect = false;
-			settings.Save();
+			settings.Save(ConfigFile.DatabaseTesting);
 			try {
-				using DB db = new();
-				if (db.Database.CanConnect()) {
-					canConnect = !verifyTables || db.VerifyTablesExist();
-				}
-			} catch { }
+				using DB db = new(true);
+				canConnect = db.Database.CanConnect() 
+					&& (!verifyTables || db.VerifyTablesExist());
+			} catch(Exception ex) {
+#if DEBUG
+				throw;
+#endif
+			}
 
-			oldSettings.Save();
 			return canConnect;
 		}
 
-		protected void Init() {
-			// Called on object initialization
-		}
-
-		// Override to be able to instantiate a DbContext at any point in the code.
+		// Overrided to be able to instantiate a DbContext at any point in the code without supplying the connection string.
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-			string connectionString = new DatabaseSettings().GetConnectionString();
+			DatabaseSettings settings = new(false);
+			settings.Load(IsMockObject ? ConfigFile.DatabaseTesting : ConfigFile.Database);
+			string connectionString = settings.GetConnectionString();
 			optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 		}
 		
@@ -65,32 +66,39 @@ namespace HalcyonFlowProject.Data.Database.Context {
 		public DbSet<UserAssignment> UserAssignments { get; set; }
 		public DbSet<TeamAssignments> TeamAssignments { get; set; }
 
-
+		/// <summary>
+		/// Checks whether all the required database tables are present in the database.
+		/// </summary>
+		/// <returns><see langword="true"/> if the tables exist in the database, <see langword="false"/> otherwise.</returns>
 		public bool VerifyTablesExist() {
-			try {
-				VerifyTableExists(Teams);
-				VerifyTableExists(Teammates);
-				VerifyTableExists(Tickets);
-				VerifyTableExists(Tasks);
-				VerifyTableExists(UserAssignments);
-				VerifyTableExists(TeamAssignments);
-				return true;
-			} catch {
-				//TODO: Handle exceptions
-				return false;
-            }
+			return VerifyTableExists(Users)
+			&& VerifyTableExists(UserRoles)
+			&& VerifyTableExists(Teams)
+			&& VerifyTableExists(Teammates)
+			&& VerifyTableExists(Tickets)
+			&& VerifyTableExists(Tasks)
+			&& VerifyTableExists(UserAssignments)
+			&& VerifyTableExists(TeamAssignments);
 		}
 
 		protected bool VerifyTableExists<TEntity>(DbSet<TEntity> table) where TEntity : class {
 			try {
 				_ = table.Any();
 				return true;
-            }catch(EntityCommandExecutionException ex) {
-				if(ex.InnerException is SqlException) {
-					return false;
-                }else {
-					throw ex;
+            }catch(Exception ex) {
+#if DEBUG
+				if(ex is EntityCommandExecutionException entityException) {
+					// SqlException is thrown if the table does not exist.
+					return entityException.InnerException is SqlException
+						? false
+						: throw entityException;
+				}else {
+					// Parameterless throw avoids changing the stacktrace of the exception that would be re-thrown.
+					throw; // Check ex
                 }
+#else
+				return false;
+#endif
             }
 		}
 
