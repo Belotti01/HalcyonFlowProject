@@ -19,15 +19,15 @@ namespace HalcyonFlowProject.Data.Settings {
         /// <summary>
         /// Save the settings to the database configuration file.
         /// </summary>
-        public void Save() => Save(ConfigFile.Database);
+        public void Save(Delegate? onSaved = null) => Save(ConfigFile.Database, onSaved);
         /// <summary>
         /// Save the settings to a custom configuration file.
         /// </summary>
         /// <param name="filepath">The path to the configuration file.</param>
-        public void Save(string filepath) {
+        public void Save(string filepath, Delegate? onSaved = null) {
             try {
                 string[] data = { Host, DatabaseName, Username, Password };
-                ConfigFile.WriteLines(ConfigFile.Database, data);
+                ConfigFile.WriteLines(filepath, data, onSaved);
             }catch { }
         }
 
@@ -42,11 +42,13 @@ namespace HalcyonFlowProject.Data.Settings {
         public void Load(string filepath) {
             string[] data;
             try {
-                data = ConfigFile.ReadLines(ConfigFile.Database);
-                Host = data[0];
-                DatabaseName = data[1];
-                Username = data[2];
-                Password = data[3];
+                data = ConfigFile.ReadLines(filepath);
+                if(data.Any()) {
+                    Host = data[0];
+                    DatabaseName = data[1];
+                    Username = data[2];
+                    Password = data[3];
+                }
             } catch { }
         }
 

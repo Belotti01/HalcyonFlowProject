@@ -32,4 +32,8 @@
     <ProjectReference Include="..\NLRazor\NLRazor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Config\" />
+  </ItemGroup>
+
 </Project>

@@ -25,7 +25,7 @@ namespace HalcyonFlowProject.Logic {
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <param name="value">The content to encode and write in the file.</param>
-        public static void Write(string path, string value) {
+        public static void Write(string path, string value, Delegate? onFinish = null) {
             InitializeDelegator();
 
             Delegator!.EnqueueAction(() => {
@@ -34,7 +34,7 @@ namespace HalcyonFlowProject.Logic {
                     File.Delete(path);
                 }
                 File.WriteAllText(path, Encode(value));
-            }, MAX_ACTION_ATTEMPTS);
+            }, MAX_ACTION_ATTEMPTS, onFinish);
         }
 
 
@@ -43,7 +43,7 @@ namespace HalcyonFlowProject.Logic {
         /// </summary>
         /// <param name="path">The path to the file.</param>
         /// <param name="lines">The lines to encode and write in the file.</param>
-        public static void WriteLines(string path, string[] lines) {
+        public static void WriteLines(string path, string[] lines, Delegate? onFinish = null) {
             InitializeDelegator();
             
             Delegator!.EnqueueAction(() => {
@@ -52,7 +52,7 @@ namespace HalcyonFlowProject.Logic {
                     File.Delete(path);
                 }
                 File.WriteAllLines(path, EncodeLines(lines));
-            }, MAX_ACTION_ATTEMPTS);
+            }, MAX_ACTION_ATTEMPTS, onFinish);
         }
 
         /// <summary>

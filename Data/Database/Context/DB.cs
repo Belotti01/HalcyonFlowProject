@@ -36,16 +36,17 @@ namespace HalcyonFlowProject.Data.Database.Context {
 		/// </returns>
 		public static bool CanConnect(DatabaseSettings settings, bool verifyTables) {
 			bool canConnect = false;
-			settings.Save(ConfigFile.DatabaseTesting);
+			bool saved = false;
+
+			settings.Save(ConfigFile.DatabaseTesting, () => saved = true);
+			// Wait for the file to end saving
+			while(!saved) Thread.Sleep(10);
+
 			try {
 				using DB db = new(true);
-				canConnect = db.Database.CanConnect() 
+				canConnect = db.Database.CanConnect()
 					&& (!verifyTables || db.VerifyTablesExist());
-			} catch(Exception ex) {
-#if DEBUG
-				throw;
-#endif
-			}
+			} catch { }
 
 			return canConnect;
 		}
@@ -55,6 +56,8 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			DatabaseSettings settings = new(false);
 			settings.Load(IsMockObject ? ConfigFile.DatabaseTesting : ConfigFile.Database);
 			string connectionString = settings.GetConnectionString();
+			// Throws an exception if the login info is invalid. This will result in the database settings
+			// input window appearing, so don't catch it.
 			optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 		}
 		
@@ -72,11 +75,11 @@ namespace HalcyonFlowProject.Data.Database.Context {
 		/// <returns><see langword="true"/> if the tables exist in the database, <see langword="false"/> otherwise.</returns>
 		public bool VerifyTablesExist() {
 			return VerifyTableExists(Users)
-			&& VerifyTableExists(UserRoles)
 			&& VerifyTableExists(Teams)
-			&& VerifyTableExists(Teammates)
-			&& VerifyTableExists(Tickets)
 			&& VerifyTableExists(Tasks)
+			&& VerifyTableExists(Tickets)
+			&& VerifyTableExists(Teammates)
+			&& VerifyTableExists(UserRoles)
 			&& VerifyTableExists(UserAssignments)
 			&& VerifyTableExists(TeamAssignments);
 		}

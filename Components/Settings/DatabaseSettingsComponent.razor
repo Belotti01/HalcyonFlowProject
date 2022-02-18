@@ -12,13 +12,13 @@
 	</InlineInput>
 
 	<!--	DATABASE NAME INPUT		-->
-	<InlineTextInput Component="Database name" Required @bind-Value="Settings.DatabaseName" Change=@(x => ToggleSave(false)) Placeholder="Database"/>
+	<InlineTextInput Component="Database name" Label="Database Name" Required @bind-Value="Settings.DatabaseName" Change=@(x => ToggleSave(false)) Placeholder="Database"/>
 
 	<!--	USERNAME INPUT		-->
-	<InlineTextInput Component="Username" Required @bind-Value="Settings.Username" Change=@(x => ToggleSave(false)) Placeholder="Username"/>
+	<InlineTextInput Component="Username" Label="Username" Required @bind-Value="Settings.Username" Change=@(x => ToggleSave(false)) Placeholder="Username"/>
 
 	<!--	PASSWORD INPUT		-->
-	<InlineInput Component="Password" Required>
+	<InlineInput Component="Password" Label="Password" Required>
 		<RadzenPassword class="tw-w-full" Name="Password" @bind-Value="Settings.Password" Change=@(x => ToggleSave(false)) Placeholder="Password" AutoComplete=false/>
 	</InlineInput>
 
@@ -55,7 +55,8 @@
 	}
 
 	protected void ToggleSave(bool enable) {
-		SaveDisabled = (!IsInputValid && !UpdateRequired) || !enable;
+		SaveDisabled = !IsInputValid || UpdateRequired || !enable;
+		this.StateHasChanged();
 	}
 
 	protected void Close(bool save) {
@@ -74,23 +75,21 @@
 			// Now check that the tables required are present.
 			UpdateRequired = !DB.CanConnect(Settings, true);
 		}
-		ToggleSave(canConnect);
 		Busy = false;
+		ToggleSave(canConnect);
 	}
 
 	protected void CreateDatabase() {
 		Busy = true;
-		DatabaseSettings oldSettings = new();
 		try {
 			Settings.Save();
-			using DB test = new();
+			using DB test = new(true);
 			test.Database.Migrate();
 			UpdateRequired = false;
 		}catch(Exception ex) {
 			Logger?.LogError($"Could not create database '{Settings.ToString()}: {ex.Message}'");
 		}
 		TestConnection();
-		oldSettings.Save();
 		Busy = false;
 	}
 }

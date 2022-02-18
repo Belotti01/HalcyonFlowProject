@@ -37,7 +37,7 @@
         /// </summary>
         /// <param name="attemptDelay">Milliseconds to wait before each 
         /// queued action's attempt.</param>
-        public DelegateResolver(int attemptDelay = 200) {
+        public DelegateResolver(int attemptDelay = 20) {
             resolver = Task.Run(StartResolver);
             AttemptDelay = attemptDelay;
             queuedActions = new();
@@ -57,7 +57,7 @@
                 
                 if(currentAction is null) {
                     // Action completed or not set - check if any is queued
-                    if(queuedActions.Count != 0) {
+                    if(queuedActions.Any()) {
                         // Start working on a new task
                         currentAction = queuedActions.Dequeue();
                     }else if(DisposeOnFinish) {
@@ -78,10 +78,10 @@
         /// <exception cref="InvalidOperationException">Thrown when <see cref="DisposeOnFinish"/>
         /// is set to <see langword="true"/>, as it's not safe to access data that's
         /// queued for disposal on another thread.</exception>
-        public void EnqueueAction(Delegate action, int attempts = 1) {
+        public void EnqueueAction(Delegate action, int attempts = 1, Delegate? onFinish = null) {
             if(DisposeOnFinish)
                 throw new InvalidOperationException("This action is not safe. Avoid queuing disposal before all tasks are queued.");
-            queuedActions.Enqueue(new(action, attempts));
+            queuedActions.Enqueue(new(action, attempts, onFinish));
         }
 
         ~DelegateResolver() {
@@ -106,17 +106,20 @@
             public int MaxAttempts { get; protected set; }
             public int Attempts { get; protected set; }
             public bool Completed { get; protected set; } = false;
+            public Delegate? OnFinish { get; protected set; }
 
-            public Delegation(Delegate action, int attempts = 1) {
+            public Delegation(Delegate action, int attempts = 1, Delegate? onFinish = null) {
                 MaxAttempts = attempts;
                 Action = action;
                 Attempts = 0;
+                OnFinish = onFinish;
             }
 
             public bool Attempt() {
                 Attempts++;
                 try {
                     Action.DynamicInvoke();
+                    OnFinish?.DynamicInvoke();
                     Completed = true;
                 } catch { }
                 return Completed;
