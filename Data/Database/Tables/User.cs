@@ -8,7 +8,7 @@
 
 		public Role? GetRole(DB db) {
 			return db.Roles.Find(RoleId);
-        }
-		
+		}
+
 	}
 }

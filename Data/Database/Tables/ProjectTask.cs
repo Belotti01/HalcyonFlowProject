@@ -16,12 +16,12 @@
 
 		public ValueTask<User?> GetCreatorAsync(DB dbContext) {
 			return dbContext.Users.FindAsync(CreatorId);
-        }
+		}
 
 		public ValueTask<Ticket?> GetSourceTicketAsync(DB dbContext) {
 			return TicketId < 0
 				? ValueTask.FromResult<Ticket?>(null)
 				: dbContext.Tickets.FindAsync(TicketId);
-        }
+		}
 	}
 }

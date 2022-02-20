@@ -14,7 +14,7 @@ namespace HalcyonFlowProject {
 			builder = WebApplication.CreateBuilder(args);
 			// Setup application, database connection & other services
 			builder.Configure();
-			
+
 			App = builder.Build();
 			// Setup HTTP, routing, authentication & mapping
 			App.Configure();
@@ -28,10 +28,10 @@ namespace HalcyonFlowProject {
 				builder.Services.AddDbContextFactory<DB>(options => {
 					try {
 						options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-					}catch { }
+					} catch { }
 				});
 				builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-			}catch { }
+			} catch { }
 			// Setup entity framework
 			builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<DB>();

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 
-#nullable disable	// Even if the teams are null, the program will not run until the database is updated.
+#nullable disable   // Even if the teams are null, the program will not run until the database is updated.
 
 namespace HalcyonFlowProject.Data.Database.Context {
 	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
@@ -13,7 +13,7 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			: base(options) {
 		}
 
-		public DB() 
+		public DB()
 			: base() {
 		}
 
@@ -21,7 +21,7 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			return new DB() {
 				IsMockObject = true
 			};
-        }
+		}
 
 		/// <summary>
 		///		Check that the information stored in the <paramref name="settings"/> object
@@ -64,7 +64,7 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			// input window appearing, so don't catch it.
 			optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 		}
-		
+
 		// All classes tied to tables should be here:
 		public DbSet<Team> Teams { get; set; }
 		public DbSet<Teammates> Teammates { get; set; }
@@ -92,23 +92,23 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			try {
 				_ = table.Any();
 				return true;
-            }catch(Exception ex) {
+			} catch(Exception ex) {
 #if DEBUG
 				if(ex is EntityCommandExecutionException entityException) {
 					// SqlException is thrown if the table does not exist.
 					return entityException.InnerException is SqlException
 						? false
 						: throw entityException;
-				}else {
+				} else {
 					// Parameterless throw avoids changing the stacktrace of the exception that would be re-thrown.
 					throw; // Check ex
-                }
+				}
 #else
 				return false;
 #endif
-            }
+			}
 		}
 
-		
-    }
+
+	}
 }
