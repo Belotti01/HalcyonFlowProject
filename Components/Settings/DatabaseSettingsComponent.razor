@@ -83,7 +83,7 @@
 		Busy = true;
 		try {
 			Settings.Save();
-			using DB test = new(true);
+			using DB test = DB.GetMockDB();
 			test.Database.Migrate();
 			UpdateRequired = false;
 		}catch(Exception ex) {

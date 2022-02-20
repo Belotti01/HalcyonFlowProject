@@ -3,21 +3,25 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Data.Entity.Core;
 using System.Data.SqlClient;
 
-#nullable disable
+#nullable disable	// Even if the teams are null, the program will not run until the database is updated.
 
 namespace HalcyonFlowProject.Data.Database.Context {
 	public class DB : IdentityDbContext<User, Role, long, UserClaim, UserRole, UserLogin, RoleClaim, UserToken> {
 		protected bool IsMockObject = false;
 
-		public DB(DbContextOptions<DB> options, bool useTestConfig = false)
+		public DB(DbContextOptions<DB> options)
 			: base(options) {
-			IsMockObject = useTestConfig;
 		}
 
-		public DB(bool useTestConfig = false)
+		public DB() 
 			: base() {
-			IsMockObject = useTestConfig;
 		}
+
+		public static DB GetMockDB() {
+			return new DB() {
+				IsMockObject = true
+			};
+        }
 
 		/// <summary>
 		///		Check that the information stored in the <paramref name="settings"/> object
@@ -43,7 +47,7 @@ namespace HalcyonFlowProject.Data.Database.Context {
 			while(!saved) Thread.Sleep(10);
 
 			try {
-				using DB db = new(true);
+				using DB db = GetMockDB();
 				canConnect = db.Database.CanConnect()
 					&& (!verifyTables || db.VerifyTablesExist());
 			} catch { }

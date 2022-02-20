@@ -1,0 +1,18 @@
+﻿@inherits BaseDbComponent<ManageTeams, DB>
+@page "/manage-teams"
+<PageTitle>Teams Management</PageTitle>
+
+<PageWrapper Title="Teams Management">
+    <RadzenCard>
+        <TeamsManager CanEdit=@CanEditTeams/>
+    </RadzenCard>
+</PageWrapper>
+
+@code {
+    protected bool CanEditTeams { get; set; }
+
+    protected override async Task OnInitializedAsync() {
+        base.OnInitialized();
+        var identity = await GetAuthStateAsync();
+    }
+}

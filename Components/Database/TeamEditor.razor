@@ -1,0 +1,32 @@
+﻿@inherits BaseComponent<TeamEditor>
+
+    <Form TItem=Team Item=Team OnSubmit=SaveEdits OnCancel=CancelEdits>
+        <InlineTextInput @bind-Value=Team.Name Label="Team Name" MinLength=1 MaxLength=32/>
+        
+        <!-- TODO: Add list of users + add/remove button -->
+        <!-- TODO: Add team create/delete buttons -->
+    </Form>
+
+@code {
+    [Parameter, Required]
+    public DB DbContext { get; set; } = null!;
+    [Parameter]
+    public Team Team { get; set; } = new();
+
+    protected DbEditor<Team> editor = null!;
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        editor = new(DbContext);
+        editor.AddOrUpdate(Team);
+    }
+
+    public void SaveEdits() {
+        editor.SaveChanges();
+    }
+
+    public void CancelEdits() {
+        editor.UndoChanges();
+    }
+
+}

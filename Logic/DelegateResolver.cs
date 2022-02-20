@@ -75,6 +75,8 @@
         /// <param name="action">The action to be executed.</param>
         /// <param name="attempts">The maximum number of times to try running the 
         /// <paramref name="action"/>.</param>
+        /// <param name="onFinish">The optional <see cref="Delegate"/> to invoke once the action
+        /// has completed.</param>
         /// <exception cref="InvalidOperationException">Thrown when <see cref="DisposeOnFinish"/>
         /// is set to <see langword="true"/>, as it's not safe to access data that's
         /// queued for disposal on another thread.</exception>

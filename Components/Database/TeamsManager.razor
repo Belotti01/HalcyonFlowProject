@@ -1,0 +1,31 @@
+﻿@inherits BaseDbComponent<TeamsManager, DB>
+
+<RadzenDropDown TValue=Team 
+				Name="Team" 
+				Context="team" 
+				Data="Teams"
+				TextProperty="Name"
+				@bind-Value=CurrentTeam />
+
+@if(CurrentTeam is not null) {
+	<RadzenCard>
+		<TeamEditor DbContext=DbContext Team=CurrentTeam></TeamEditor>
+	</RadzenCard>
+}
+
+
+
+@code {
+	[Parameter]
+	public IEnumerable<Team>? Teams { get; set; }
+	[Parameter]
+	public bool CanEdit { get; set; } = false;
+
+	protected string? currentTeamName;
+	protected Team? CurrentTeam { get; set; }
+
+	protected override async Task OnInitializedAsync() {
+		await base.OnInitializedAsync();
+		Teams ??= DbContext?.Teams ?? Enumerable.Empty<Team>();
+	}
+}
