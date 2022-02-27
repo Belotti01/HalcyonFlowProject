@@ -1,13 +1,21 @@
 ﻿@inherits BaseDbComponent<TeamsManager, DB>
 
-<div class="tw-flex tw-my-2">
-<Paragraph Class="tw-mr-2" Size=TextSize.L Text="Select the Team to view:"/>
-<RadzenDropDown TValue=Team 
-				Name="Team" 
-				Context="team" 
-				Data="Teams"
-				TextProperty="Name"
-				@bind-Value=CurrentTeam />
+<div class="tw-flex tw-my-2 tw-justify-between">
+	<InlineTextInput @bind-Value=newTeamName Label="Create new Team:" MinLength=1 MaxLength=32 LabelTextSize=TextSize.L/>
+	<RadzenButton Disabled=!IsNewTeamNameValid Text="+" Click="AddTeam"/>
+</div>
+
+<div class="tw-flex tw-my-2 tw-justify-between">
+	<div class="tw-flex tw-mx-2">
+		<Paragraph Class="tw-mr-2" Size=TextSize.L Text="Select the Team to view:"/>
+		<RadzenDropDown TValue=Team 
+						Name="Team" 
+						Context="team" 
+						Data="Teams"
+						TextProperty="Name"
+						@bind-Value=CurrentTeam />
+	</div>
+	<RadzenButton Disabled=@(CurrentTeam is null) Text="-" Click="RemoveTeam" ButtonStyle=ButtonStyle.Danger/>
 </div>
 
 @if(CurrentTeam is not null) {
@@ -20,15 +28,43 @@
 
 @code {
 	[Parameter]
-	public IEnumerable<Team>? Teams { get; set; }
+	public IEnumerable<Team> Teams { get; set; } = Enumerable.Empty<Team>();
 	[Parameter]
 	public bool CanEdit { get; set; } = false;
 
+	protected DbEditor<Team>? teamEditor;
+	protected string newTeamName = "";
+	protected bool IsNewTeamNameValid => newTeamName.Length > 0 && newTeamName.Length < 32 && !Teams!.Any(x => x.Name.Equals(newTeamName, StringComparison.CurrentCultureIgnoreCase));
 	protected string? currentTeamName;
 	protected Team? CurrentTeam { get; set; }
 
 	protected override async Task OnInitializedAsync() {
 		await base.OnInitializedAsync();
-		Teams ??= DbContext?.Teams ?? Enumerable.Empty<Team>();
+		if(DbContext is not null) {
+			teamEditor = new(DbContext);
+		}
+		LoadTeams();
+	}
+
+	protected void LoadTeams() {
+		Teams = DbContext?.Teams ?? Enumerable.Empty<Team>();
+	}
+
+	protected void AddTeam() {
+		if(!IsNewTeamNameValid || teamEditor is null) return;
+		teamEditor.Add(new() {
+				Name = newTeamName
+			});
+		teamEditor.ClearTrackers();
+		LoadTeams();
+	}
+
+	protected void RemoveTeam() {
+		if(CurrentTeam is null || teamEditor is null) return;
+		Team teamToDelete = CurrentTeam;
+		CurrentTeam = null;
+		teamEditor.Remove(teamToDelete);
+		teamEditor.ClearTrackers();
+		LoadTeams();
 	}
 }

@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HalcyonFlowProject.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20220128004532_databaseMigration")]
+    [Migration("20220227211141_databaseMigration")]
     partial class databaseMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("HalcyonFlowProject.Data.Database.Tables.ProjectTask", b =>
@@ -176,6 +176,10 @@ namespace HalcyonFlowProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("Role");
 
                     b.Property<long>("TeamId")
                         .HasColumnType("bigint")

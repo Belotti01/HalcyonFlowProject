@@ -16,7 +16,7 @@ namespace HalcyonFlowProject.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("HalcyonFlowProject.Data.Database.Tables.ProjectTask", b =>
@@ -174,6 +174,10 @@ namespace HalcyonFlowProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int")
+                        .HasColumnName("Role");
 
                     b.Property<long>("TeamId")
                         .HasColumnType("bigint")
