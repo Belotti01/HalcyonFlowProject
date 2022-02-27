@@ -50,7 +50,7 @@
 			} catch { }
 		}
 
-		// Not implementing ICloneable cuz it sucks
+		// Not implementing ICloneable cuz it sucks (requires the method to return object)
 		public DatabaseSettings Clone() {
 			return new DatabaseSettings(false) {
 				Host = Host,

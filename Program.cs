@@ -46,6 +46,7 @@ namespace HalcyonFlowProject {
 			// Radzen components
 			builder.Services.AddScoped<DialogService>();
 			builder.Services.AddScoped<TooltipService>();
+			builder.Services.AddScoped<NotificationService>();
 			// Add other dependencies here
 			// ...
 		}

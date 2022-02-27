@@ -423,24 +423,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: none;
 }
 
-.tw-col-span-2 {
-  grid-column: span 2 / span 2;
-}
-
 .tw-col-span-8 {
   grid-column: span 8 / span 8;
 }
 
 .tw-col-span-3 {
   grid-column: span 3 / span 3;
-}
-
-.tw-row-span-2 {
-  grid-row: span 2 / span 2;
-}
-
-.tw-m-auto {
-  margin: auto;
 }
 
 .tw-my-3 {
@@ -453,8 +441,13 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 0.5rem;
 }
 
-.tw-ml-2 {
-  margin-left: 0.5rem;
+.tw-mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.tw-mr-2 {
+  margin-right: 0.5rem;
 }
 
 .tw-mt-2 {
@@ -481,8 +474,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 100%;
 }
 
-.tw-basis-1\/6 {
-  flex-basis: 16.666667%;
+.tw-flex-grow {
+  flex-grow: 1;
+}
+
+.tw-grow {
+  flex-grow: 1;
 }
 
 .tw-basis-4\/5 {
@@ -493,16 +490,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   flex-basis: 25%;
 }
 
-.tw-grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
 .tw-grid-cols-12 {
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
-.tw-flex-col {
-  flex-direction: column;
+.tw-items-center {
+  align-items: center;
 }
 
 .tw-justify-center {
@@ -511,12 +504,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .tw-justify-between {
   justify-content: space-between;
-}
-
-.tw-space-y-2 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
 .tw-text-xs {
@@ -582,12 +569,4 @@ Ensure the default browser behavior of the `hidden` attribute.
 .tw-text-9xl {
   font-size: 8rem;
   line-height: 1;
-}
-
-.tw-uppercase {
-  text-transform: uppercase;
-}
-
-.tw-capitalize {
-  text-transform: capitalize;
 }

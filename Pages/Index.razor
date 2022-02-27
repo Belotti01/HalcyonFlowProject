@@ -1,4 +1,5 @@
-﻿@page "/"
+﻿@inherits BaseComponent<Index>
+@page "/"
 <TailwindForceLoad/>
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +8,10 @@
         <OpenDialogButton TDialog=@DatabaseSettingsComponent ButtonText="Database Settings"/>
     </RadzenCard>
 </PageWrapper>
+
+@code {
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        NotifyDebug("Debug mode is running");
+    }
+}

@@ -1,11 +1,14 @@
 ﻿@inherits BaseDbComponent<TeamsManager, DB>
 
+<div class="tw-flex tw-my-2">
+<Paragraph Class="tw-mr-2" Size=TextSize.L Text="Select the Team to view:"/>
 <RadzenDropDown TValue=Team 
 				Name="Team" 
 				Context="team" 
 				Data="Teams"
 				TextProperty="Name"
 				@bind-Value=CurrentTeam />
+</div>
 
 @if(CurrentTeam is not null) {
 	<RadzenCard>

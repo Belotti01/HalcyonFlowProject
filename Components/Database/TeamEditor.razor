@@ -1,32 +1,127 @@
 ﻿@inherits BaseComponent<TeamEditor>
 
 	<Form TItem=Team Item=Team OnSubmit=SaveEdits OnCancel=CancelEdits>
-		<InlineTextInput @bind-Value=Team.Name Label="Team Name" MinLength=1 MaxLength=32/>
-		
-		<!-- TODO: Add list of users + add/remove button -->
-		<!-- TODO: Add team create/delete buttons -->
+		<div class="tw-my-2">
+			<InlineTextInput @bind-Value=Team.Name Label="Team Name" MinLength=1 MaxLength=32/>
+			
+			<div class="tw-flex tw-justify-between tw-my-2 tw-items-center">
+				<Paragraph Size=TextSize.Base Text="Add user:"/>
+				<div class="tw-flex-grow tw-grow">
+					<RadzenDropDown TValue=User class="tw-mx-1"
+									Name="User" 
+									Context="user" 
+									Data=ExcludedUsers
+									TextProperty="Name"
+									@bind-Value=selectedExcludedUser />
+				</div>
+				<RadzenButton Text="+" Disabled=@(selectedExcludedUser is null || Busy) Click=@(() => AddUser(selectedExcludedUser))/>
+			</div>
+
+			<RadzenDataList TItem=User Data=Teammates Context=user PageSize=30>
+				<Template>
+					<div class="tw-flex tw-justify-between">
+						<Paragraph Size=TextSize.S Text=@(string.IsNullOrWhiteSpace(user.UserName) ? user.FullName : user.UserName)/>
+						<RadzenButton Disabled=Busy Text="-" ButtonStyle=ButtonStyle.Danger Click=@(() => RemoveTeammate(user))/>
+					</div>
+				</Template>
+			</RadzenDataList>
+			<!-- TODO: Add team create/delete buttons -->
+		</div>
 	</Form>
 
 @code {
 	[Parameter, Required]
 	public DB DbContext { get; set; } = null!;
-	[Parameter]
+	[Parameter, Required]
 	public Team Team { get; set; } = new();
 
-	protected DbEditor<Team> editor = null!;
+	protected bool Busy { get; set; } = false;
+
+	public IEnumerable<User?>? ExcludedUsers { get; set; }
+	public IEnumerable<User?>? Teammates { get; set; }
+
+	protected DbEditor<Team> teamEditor = null!;
+	protected DbEditor<Teammates> teammatesEditor = null!;
+	protected User? selectedExcludedUser;
 
 	protected override void OnInitialized() {
+		Busy = true;
 		base.OnInitialized();
-		editor = new(DbContext);
-		editor.AddOrUpdate(Team);
+		teamEditor = new(DbContext);
+		teammatesEditor = new(DbContext);
+		teamEditor.AddOrUpdate(Team);
+		UpdateTeammates();
+		UpdateExcludedUsers();
+		Busy = false;
 	}
 
-	public void SaveEdits() {
-		editor.SaveChanges();
+	protected void UpdateExcludedUsers() {
+		if(Teammates is not null) {
+			ExcludedUsers = DbContext.Users.AsEnumerable().Except(Teammates);
+		}
 	}
 
-	public void CancelEdits() {
-		editor.UndoChanges();
+	protected void UpdateTeammates() {
+		Teammates = Team.GetMembers(DbContext);
+	}
+
+	protected void SaveEdits() {
+		Busy = true;
+		teamEditor.SaveChanges();
+		teammatesEditor.SaveChanges();
+		Busy = false;
+	}
+
+	protected void CancelEdits() {
+		Busy = true;
+		if(teamEditor.HasPendingChanges || teammatesEditor.HasPendingChanges) {
+			teamEditor.UndoChanges();
+			// Keep tracking changes for the selected team
+			teamEditor.AddOrUpdate(Team);
+
+			teammatesEditor.UndoChanges();
+			UpdateTeammates();
+			UpdateExcludedUsers();
+			// Reload the Team information
+			Team = DbContext.Entry(Team).Entity;
+		}
+		Busy = false;
+	}
+
+	public void RemoveTeammate(User user) {
+		if(Busy) return;
+		Busy = true;
+		Teammates? teammate = DbContext.Teammates.FirstOrDefault(x => x.UserId == user.Id);
+		if(teammate is not null) {
+			teammatesEditor.Remove(teammate);
+			UpdateTeammates();
+			UpdateExcludedUsers();
+		}
+		Busy = false;
+	}
+
+	protected void AddUser(User? user) {
+		if(Busy) return;
+		if(user is null || Teammates is null || Teammates.Contains(user)) return;
+		Busy = true;
+		teammatesEditor.Add(new() {
+			TeamId = Team.Id,
+			UserId = user.Id
+		});
+		selectedExcludedUser = null;
+		UpdateTeammates();
+		UpdateExcludedUsers();
+		Busy = false;
+	}
+
+	~TeamEditor() {
+		// Don't save changes when the page is closed
+		teamEditor?.UndoChanges();
+		teammatesEditor?.UndoChanges();
+		teamEditor?.Dispose();
+		teammatesEditor?.Dispose();
+		teamEditor = null!;
+		teammatesEditor = null!;
 	}
 
 }

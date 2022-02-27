@@ -10,6 +10,16 @@
 			return dbContext.Teammates.Where(x => x.TeamId == Id).ToArray();
 		}
 
+		public User?[] GetMembers(DB dbContext) {
+			return GetTeammates(dbContext)
+				.Select(x => {
+					Task<User?> t = x.GetUserAsync(dbContext);
+					t.Wait();
+					return t.Result;
+				})
+				.ToArray();				
+		}
+
 		public TeamAssignments[] GetAssignments(DB dbContext) {
 			return dbContext.TeamAssignments.Where(x => x.TeamId == Id).ToArray();
 		}
